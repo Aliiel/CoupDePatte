@@ -2,7 +2,7 @@
 Application de Signalement d'Animaux Perdus ou Trouvés
 
 Description
-L'application MMA a pour but de permettre aux propriétaires d'animaux de retrouver plus facilement leurs animaux égarés. Elle permet à l'utilisateur de publier des annonces pour un animal perdu ou retrouvé et de recevoir des notifications dès qu'une annonce correspondant à ses critères est publiée.
+L'application a pour but de permettre aux propriétaires d'animaux de retrouver plus facilement leurs animaux égarés. Elle permet à l'utilisateur de publier des annonces pour un animal perdu ou retrouvé et de recevoir des notifications dès qu'une annonce correspondant à ses critères est publiée.
 
 Cahier des Charges
 Fonctionnalités principales :
