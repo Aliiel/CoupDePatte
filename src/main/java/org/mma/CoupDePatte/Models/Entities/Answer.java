@@ -24,8 +24,8 @@ public class Answer {
     @Column(name = "date", nullable = false)
     private Date date;
 
-    @Column(name = "message", nullable = false)
-    private TextArea message;
+    @Column(name = "content", nullable = false, length = 200)
+    private String content;
 
     @Column(name = "isTakeIn")
     private Boolean isTakeIn;
