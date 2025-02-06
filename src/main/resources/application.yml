@@ -13,5 +13,10 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create-drop
+application:
+  security:
+    jwt:
+      secret-key: f3d54c6aa751c0c30783a4dc2e6c08f9b8a0dabe2950fb3b7a5c5482e14b1bb6
+      expiration-time: 86400000 # 1 jour
 
 
