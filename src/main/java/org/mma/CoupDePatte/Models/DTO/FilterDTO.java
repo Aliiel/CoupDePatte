@@ -3,7 +3,7 @@ package org.mma.CoupDePatte.Models.DTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public record FilterDTO(
         //Gestion des filtres choisis par l'utilisateur pour lui envoyer les annonces correspondant à son filtre
@@ -12,7 +12,7 @@ public record FilterDTO(
         @NotBlank(message = "Précisez à proximité de quelle ville")
         String town,
         @NotNull (message = "Précisez à partir de quelle date faire la recherche")
-        LocalDate EventDate,
+        Date eventDate,
         @NotBlank (message = "Sélectionnez une espèce d'animal")
         String specie,
         String breed,
