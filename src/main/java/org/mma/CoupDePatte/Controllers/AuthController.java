@@ -2,6 +2,7 @@ package org.mma.CoupDePatte.Controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.mma.CoupDePatte.Models.DTO.AuthenticationRequest;
+import org.mma.CoupDePatte.Models.DTO.RegistrationRequest;
 import org.mma.CoupDePatte.Services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,5 +24,14 @@ public class AuthController {
         System.out.println("Username : " + request.username());
 
         return ResponseEntity.ok(userService.authenticate(request));
+    }
+
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegistrationRequest request) {
+        System.out.println("Registration request: " + request);
+        System.out.println("Username : " + request.username());
+
+        return ResponseEntity.ok(userService.registerUser(request));
     }
 }

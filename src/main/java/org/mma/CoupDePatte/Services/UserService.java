@@ -2,12 +2,10 @@ package org.mma.CoupDePatte.Services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.mma.CoupDePatte.Exceptions.InvalidCredentialsException;
 import org.mma.CoupDePatte.Exceptions.InvalidPasswordException;
 import org.mma.CoupDePatte.Exceptions.UserAlreadyExistsException;
-import org.mma.CoupDePatte.Models.DTO.AuthenticationRequest;
-import org.mma.CoupDePatte.Models.DTO.AuthenticationResponse;
-import org.mma.CoupDePatte.Models.DTO.CityDTO;
-import org.mma.CoupDePatte.Models.DTO.UserDTO;
+import org.mma.CoupDePatte.Models.DTO.*;
 import org.mma.CoupDePatte.Models.Entities.City;
 import org.mma.CoupDePatte.Models.Entities.Role;
 import org.mma.CoupDePatte.Models.Entities.User;
@@ -43,7 +41,7 @@ public class UserService {
 
 
 
-    public UserDTO createUser(UserDTO userDTO) {
+    public RegistrationResponse createUser(UserDTO userDTO) {
 
         Optional<User> existingUser = userRepository.findByEmail(userDTO.getEmail());
         if (existingUser.isPresent()) {
@@ -65,15 +63,39 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Optional<Role> role = roleRepository.findByName("USER");
-        if (role.isPresent()) {
-            user.setRole(role.get());
-        }
+        role.ifPresent(user::setRole);
 
         user.setCity(city);
 
         userRepository.save(user);
 
-        return userMapper.toUserDTO(user);
+        final String token = jwtService.generateToken(user);
+
+        return new RegistrationResponse(token, userDTO.getUsername(), userDTO.getEmail(), userDTO.getRole().getName());
+    }
+
+
+    public RegistrationResponse registerUser(RegistrationRequest registrationRequest) {
+
+        Optional<User> existingUser = userRepository.findByEmail(registrationRequest.email());
+        if (existingUser.isPresent()) {
+            throw new UserAlreadyExistsException(HttpStatus.CONFLICT.value());
+        }
+
+        if (!isPasswordStrong(registrationRequest.password())) {
+            throw new InvalidPasswordException(HttpStatus.BAD_REQUEST.value());
+        }
+
+        User user = new User();
+        user.setUsername(registrationRequest.username());
+        user.setEmail(registrationRequest.email());
+        user.setPassword(passwordEncoder.encode(registrationRequest.password()));
+        Optional<Role> role = roleRepository.findByName("USER");
+        role.ifPresent(user::setRole);
+        userRepository.save(user);
+        final String token = jwtService.generateToken(user);
+
+        return new RegistrationResponse(token, user.getUsername(), user.getEmail(), user.getRole().getName());
     }
 
 
@@ -99,7 +121,7 @@ public class UserService {
 
         } catch (AuthenticationException e) {
 
-            throw new RuntimeException("Identifiants invalides");
+            throw new InvalidCredentialsException(HttpStatus.UNAUTHORIZED.value());
         }
     }
 

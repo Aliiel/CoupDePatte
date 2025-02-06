@@ -1,6 +1,7 @@
 package org.mma.CoupDePatte.Controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.mma.CoupDePatte.Models.DTO.RegistrationResponse;
 import org.mma.CoupDePatte.Models.DTO.UserDTO;
 import org.mma.CoupDePatte.Services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO user) {
+    public ResponseEntity<RegistrationResponse> createUser(@RequestBody UserDTO userDTO) {
 
-        UserDTO createdUser = userService.createUser(user);
-        return ResponseEntity.ok(createdUser);
+        RegistrationResponse registrationResponse = userService.createUser(userDTO);
+        return ResponseEntity.ok(registrationResponse);
     }
 
     @GetMapping
