@@ -2,7 +2,7 @@ spring:
   application:
     name: CoupDePatte
   datasource:
-    url: jdbc:postgresql://localhost:5432/dbPet
+    url: jdbc:postgresql://localhost:5432/dbpet
     username: postgres
     password: password
     driver-class-name: org.postgresql.Driver
