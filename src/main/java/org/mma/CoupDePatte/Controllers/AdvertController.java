@@ -1,8 +1,10 @@
 package org.mma.CoupDePatte.Controllers;
 
+import org.mma.CoupDePatte.Models.Entities.Advert;
 import org.mma.CoupDePatte.Services.AdvertServices;
 import org.mma.CoupDePatte.Services.NotificationsServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,7 @@ public class AdvertController {
     }
 
     @PostMapping("/advert")
-    Public ResponseEntity<Advert> createAdvert(@RequestBody Advert advert) {
+    public ResponseEntity<Advert> createAdvert(@RequestBody Advert advert) {
         Advert savedAdverts = advertServices.save(advert);
         notificationsServices.sendNewAdvertNotification(savedAdverts);
         return ResponseEntity.ok(savedAdverts);
