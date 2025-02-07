@@ -4,28 +4,31 @@ import org.mma.CoupDePatte.Models.DTO.FilterDTO;
 import org.mma.CoupDePatte.Models.Entities.*;
 import org.mma.CoupDePatte.Models.Repositories.AdvertRepository;
 import org.mma.CoupDePatte.Models.Repositories.PetRepository;
-import org.mma.CoupDePatte.Services.BreedService;
+import org.mma.CoupDePatte.Services.BreedServices;
+import org.mma.CoupDePatte.Services.CityServices;
 import org.mma.CoupDePatte.Services.GenderService;
-import org.mma.CoupDePatte.Services.SpecieService;
+import org.mma.CoupDePatte.Services.SpecieServices;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
 
+@Component
 public class FilterMapper {
     AdvertRepository advertRep;
-    SpecieService specieServ;
-    BreedService breedServ;
-    CityService cityServ;
+    SpecieServices specieServ;
+    BreedServices breedServ;
+    CityServices cityServ;
     GenderService genderServ;
     PetRepository petRep;
 
-    public FilterMapper(AdvertRepository advertRepository, SpecieService specieService, CityService cityService,
-                        GenderService genderService, BreedService breedService, PetRepository petRepository){
-        this.specieServ=specieService;
-        this.breedServ=breedService;
-        this.cityServ = cityService;
+    public FilterMapper(AdvertRepository advertRepository, SpecieServices specieServices, CityServices cityServices,
+        GenderService genderService, BreedServices breedServices, PetRepository petRepository){
+        this.specieServ = specieServices;
+        this.breedServ = breedServices;
+        this.cityServ = cityServices;
         this.genderServ = genderService;
-        this.advertRep= advertRepository;
+        this.advertRep = advertRepository;
         this.petRep = petRepository;
     }
     public ArrayList<Advert> findGoodList(FilterDTO filterDTO){

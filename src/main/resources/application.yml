@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/dbpet
     username: postgres
-    password: isa123
+    password: password
     driver-class-name: org.postgresql.Driver
   jpa:
     database: postgresql
