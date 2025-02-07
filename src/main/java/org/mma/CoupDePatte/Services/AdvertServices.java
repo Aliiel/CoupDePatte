@@ -28,11 +28,12 @@ public class AdvertServices {
     UserServices userServ;
     PetMapper petMap;
 
+    private final NotificationsServices notificationsServices;
 
     @Autowired
     public AdvertServices(AdvertRepository advertRepository, PetServices petServices,
         CityServices cityServices, UserServices userServices, AdvertMapper advMapper,
-        FilterMapper filterMapper, BreedRepository breedRepository, PetMapper petMapper){
+        FilterMapper filterMapper, BreedRepository breedRepository, PetMapper petMapper, NotificationsServices notificationsServices){
         this.advertRep = advertRepository;
         this.petServ = petServices;
         this.cityServ = cityServices;
@@ -40,6 +41,7 @@ public class AdvertServices {
         this.advMap = advMapper;
         this.filterMap = filterMapper;
         this.petMap = petMapper;
+        this.notificationsServices = notificationsServices;
     }
 
 
@@ -75,11 +77,16 @@ public class AdvertServices {
         advert.setUser(userServ.getById(advertDTO.userId()));
         advert.setCity(cityServ.getUserById(advertDTO.cityId()));
         advert.setPet(petServ.createPet(advertDTO.petDTO()));
-        advertRep.save(advert);
-        Long advertId = advert.getId();
+        advertRep.save(advert); // Persist l'annonce
 
-        return "Votre annonce a bien été créée sous la référence " + (advertId);
+        // Appeler la méthode pour envoyer des notifications
+
+        notificationsServices.sendNewAdvertNotification(advert);
+
+        Long advertId = advert.getId();
+        return "Votre annonce a bien été créée sous la référence " + advertId;
     }
+
 
     public AdvertResponseDTO updateAdvert(long id, AdvertDTO advertDTO) {
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
