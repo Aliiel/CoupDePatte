@@ -6,10 +6,10 @@ import org.mma.CoupDePatte.Models.Repositories.BreedRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BreedService {
+public class BreedServices {
     BreedRepository breedRep;
 
-    public BreedService(BreedRepository breedRepository){
+    public BreedServices(BreedRepository breedRepository){
         this.breedRep=breedRepository;
     }
 

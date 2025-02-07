@@ -17,9 +17,9 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class AdvertService {
+public class AdvertServices {
     AdvertRepository advertRep;
-    PetService petServ;
+    PetServices petServ;
     FilterMapper filterMap;
     AdvertMapper advMap;
     CityService cityServ;
@@ -28,9 +28,9 @@ public class AdvertService {
 
 
 
-    public AdvertService(AdvertRepository advertRepository, PetService petService,
-                         CityService cityService, UserService userService, AdvertMapper advMapper,
-                         FilterMapper filterMapper, BreedRepository breedRepository,PetMapper petMapper){
+    public AdvertServices(AdvertRepository advertRepository, PetServices petService,
+                          CityService cityService, UserService userService, AdvertMapper advMapper,
+                          FilterMapper filterMapper, BreedRepository breedRepository, PetMapper petMapper){
         this.advertRep= advertRepository;
         this.petServ = petService;
         this.cityServ = cityService;

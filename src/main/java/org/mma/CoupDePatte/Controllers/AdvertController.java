@@ -3,7 +3,7 @@ package org.mma.CoupDePatte.Controllers;
 import org.mma.CoupDePatte.Models.DTO.AdvertDTO;
 import org.mma.CoupDePatte.Models.DTO.AdvertResponseDTO;
 import org.mma.CoupDePatte.Models.DTO.FilterDTO;
-import org.mma.CoupDePatte.Services.AdvertService;
+import org.mma.CoupDePatte.Services.AdvertServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +13,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/adverts")
 public class AdvertController {
-    AdvertService advServ;
+    AdvertServices advServ;
 
-    public AdvertController(AdvertService advService){
+    public AdvertController(AdvertServices advService){
         this.advServ = advService;
     }
 

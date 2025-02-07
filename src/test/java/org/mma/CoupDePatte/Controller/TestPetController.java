@@ -5,7 +5,7 @@ import org.mma.CoupDePatte.Exceptions.ResourceNotFoundException;
 import org.mma.CoupDePatte.Models.DTO.PetDTO;
 import org.mma.CoupDePatte.Models.DTO.PetResponseDTO;
 import org.mma.CoupDePatte.Models.Entities.Pet;
-import org.mma.CoupDePatte.Services.PetService;
+import org.mma.CoupDePatte.Services.PetServices;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 class TestPetController {
     private MockMvc mockMvc;
     @Mock
-    private PetService petServ;
+    private PetServices petServ;
     @InjectMocks
     private PetController petCtrl;
 

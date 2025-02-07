@@ -3,17 +3,17 @@ package org.mma.CoupDePatte.Controllers;
 import org.mma.CoupDePatte.Models.DTO.PetDTO;
 import org.mma.CoupDePatte.Models.DTO.PetResponseDTO;
 import org.mma.CoupDePatte.Models.Entities.Pet;
-import org.mma.CoupDePatte.Services.PetService;
+import org.mma.CoupDePatte.Services.PetServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/pet")
+@RequestMapping("/pets")
 public class PetController {
-    PetService petServ;
+    PetServices petServ;
 
-    public PetController(PetService petService){
+    public PetController(PetServices petService){
         this.petServ= petService;
     }
 

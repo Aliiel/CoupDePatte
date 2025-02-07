@@ -4,23 +4,23 @@ import org.mma.CoupDePatte.Models.DTO.FilterDTO;
 import org.mma.CoupDePatte.Models.Entities.*;
 import org.mma.CoupDePatte.Models.Repositories.AdvertRepository;
 import org.mma.CoupDePatte.Models.Repositories.PetRepository;
-import org.mma.CoupDePatte.Services.BreedService;
-import org.mma.CoupDePatte.Services.GenderService;
-import org.mma.CoupDePatte.Services.SpecieService;
+import org.mma.CoupDePatte.Services.BreedServices;
+import org.mma.CoupDePatte.Services.GenderServices;
+import org.mma.CoupDePatte.Services.SpecieServices;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 public class FilterMapper {
     AdvertRepository advertRep;
-    SpecieService specieServ;
-    BreedService breedServ;
+    SpecieServices specieServ;
+    BreedServices breedServ;
     CityService cityServ;
-    GenderService genderServ;
+    GenderServices genderServ;
     PetRepository petRep;
 
-    public FilterMapper(AdvertRepository advertRepository, SpecieService specieService, CityService cityService,
-                        GenderService genderService, BreedService breedService, PetRepository petRepository){
+    public FilterMapper(AdvertRepository advertRepository, SpecieServices specieService, CityService cityService,
+                        GenderServices genderService, BreedServices breedService, PetRepository petRepository){
         this.specieServ=specieService;
         this.breedServ=breedService;
         this.cityServ = cityService;
