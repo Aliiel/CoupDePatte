@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/adverts")
 public class AdvertController {
@@ -43,4 +44,5 @@ public class AdvertController {
         return ResponseEntity.status(HttpStatus.CREATED).body(advServ.updateAdvert(id,advertDTO));
 
     }
+
 }
