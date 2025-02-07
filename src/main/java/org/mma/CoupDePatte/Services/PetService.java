@@ -2,6 +2,7 @@ package org.mma.CoupDePatte.Services;
 
 import org.mma.CoupDePatte.Exceptions.*;
 import org.mma.CoupDePatte.Models.DTO.*;
+import org.mma.CoupDePatte.Models.Mappers.PetMapper;
 import org.mma.CoupDePatte.Models.Repositories.*;
 import org.mma.CoupDePatte.Models.Entities.*;
 
@@ -12,18 +13,21 @@ public class PetService {
     PetRepository petRep;
     GenderRepository genderRep;
     BreedRepository breedRep;
+    PetMapper petMap;
 
     public PetService(PetRepository petRepository, GenderRepository genderRepository,
-                      BreedRepository breedRepository){
+                      BreedRepository breedRepository, PetMapper petMapper){
         this.petRep = petRepository;
         this.genderRep= genderRepository;
         this.breedRep= breedRepository;
+        this.petMap= petMapper;
     }
 
-    public Pet getPetById(Long id){
+    public PetResponseDTO getPetById(Long id){
          Pet pet = petRep.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Animal avec ID " + id + " non trouvé"));
-        return pet;
+         PetResponseDTO petRDTO=petMap.petToResponseDTO(pet);
+        return petRDTO;
     }
 
     public Pet createPet(PetDTO petDTO){
@@ -43,8 +47,14 @@ public class PetService {
         return pet;
     }
 
-    public Pet updatePet(PetDTO petDTO){
-        Pet pet = new Pet();
+    public PetResponseDTO updateDTOPet(long id, PetDTO petDTO){
+        Pet pet = updatePet(id, petDTO);
+        return petMap.petToResponseDTO(pet);
+    }
+
+    public Pet updatePet(long id, PetDTO petDTO){
+        Pet pet = petRep.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Animal avec ID " + id + " non trouvé"));
         if (petDTO.name()!=null) {
             pet.setName(petDTO.name());
         }

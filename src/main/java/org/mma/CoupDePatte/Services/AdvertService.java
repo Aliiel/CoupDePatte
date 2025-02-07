@@ -98,7 +98,7 @@ public class AdvertService {
         advert.setIsTakeIn(advertDTO.isTakeIn());
         }
         if (advertDTO.petDTO() !=null) {
-            petServ.updatePet(advertDTO.petDTO());
+            petServ.updatePet(advert.getPet().getId(),advertDTO.petDTO());
         }
 
         advertRep.save(advert);
