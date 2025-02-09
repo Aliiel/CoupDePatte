@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
     Optional<Advert> findByIdAndIsActiveTrue(Long id);
+    Optional<Advert> findByIdAndIsActiveFalse(Long id);
 
     //Annonces "Trouvé"
     ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundTrue

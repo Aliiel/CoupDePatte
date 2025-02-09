@@ -1,17 +1,22 @@
 package org.mma.CoupDePatte.Services;
 
+import org.mma.CoupDePatte.Comparators.OrderByDate;
+import org.mma.CoupDePatte.Exceptions.BusinessLogicException;
 import org.mma.CoupDePatte.Exceptions.ResourceNotFoundException;
 import org.mma.CoupDePatte.Models.DTO.AdvertDTO;
 import org.mma.CoupDePatte.Models.DTO.AdvertResponseDTO;
 import org.mma.CoupDePatte.Models.DTO.FilterDTO;
+import org.mma.CoupDePatte.Models.DTO.MsgDTO;
 import org.mma.CoupDePatte.Models.Entities.*;
 import org.mma.CoupDePatte.Models.Mappers.AdvertMapper;
+import org.mma.CoupDePatte.Models.Mappers.MsgMapper;
 import org.mma.CoupDePatte.Models.Mappers.PetMapper;
 import org.mma.CoupDePatte.Models.Repositories.AdvertRepository;
-import org.mma.CoupDePatte.Models.Repositories.BreedRepository;
+import org.mma.CoupDePatte.Models.Repositories.MessageRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 @Service
@@ -21,17 +26,28 @@ public class AdvertServices {
     AdvertMapper advMap;
     CityServices cityServ;
     UserServices userServ;
+    MessageRepository msgRep;
+    AnswerServices answerServ;
+    MsgMapper msgMap;
     PetMapper petMap;
+    String msgTrouveDefault;
+    String msgPerduDefault;
 
     public AdvertServices(AdvertRepository advertRepository, PetServices petService,
-                          CityServices cityService, UserServices userService, AdvertMapper advMapper,
-                          BreedRepository breedRepository, PetMapper petMapper){
+                            CityServices cityService, UserServices userService, AdvertMapper advMapper,
+                            PetMapper petMapper, MsgMapper msgMapper,
+                            MessageRepository msgRepository, AnswerServices answerService){
         this.advertRep= advertRepository;
+        this.msgRep= msgRepository;
         this.petServ = petService;
         this.cityServ = cityService;
         this.userServ=userService;
+        this.answerServ=answerService;
         this.advMap = advMapper;
+        this.msgMap = msgMapper;
         this.petMap=petMapper;
+        this.msgTrouveDefault="Cette personne a peut-être trouvé votre animal";
+        this.msgPerduDefault="Cette personne a perdu un animal ressemblant à celui que vous avez trouvé";
     }
 
     public ArrayList<Advert> findGoodList(FilterDTO filterDTO){
@@ -57,10 +73,16 @@ public class AdvertServices {
 
     }
 
-    public AdvertResponseDTO getById(Long id) {
+    public AdvertResponseDTO getDTOById(Long id) {
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
         return advMap.AdvertToResponseDTO(advert);
+
+    }
+    public Advert getById(Long id) {
+        Advert advert = advertRep.findByIdAndIsActiveTrue(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
+        return advert;
 
     }
 
@@ -122,5 +144,108 @@ public class AdvertServices {
         advertRep.save(advert);
         return advMap.AdvertToResponseDTO(advert);
 
+    }
+
+    public void updAdvUnActive(long id) {
+        Advert advert = advertRep.findByIdAndIsActiveTrue(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
+        advert.setIsActive(false);
+        advertRep.save(advert);
+
+    }
+
+    public void updAdvActive(long id) {
+        Advert advert = advertRep.findByIdAndIsActiveFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou active"));
+        advert.setIsActive(true);
+        advertRep.save(advert);
+
+    }
+
+    public String createMsg(long id, MsgDTO msgDTO){
+        if((msgDTO.email()== null) && (msgDTO.phone()==null)){
+            new BusinessLogicException("Merci de saisir votre adresse email et/ou votre numéro de téléphone pour"+
+                    " permettre à l'annonceur de vous contacter");
+        }
+        if(msgDTO.date()== null){
+            new BusinessLogicException("Merci de préciser la date de l'événement");
+        }
+        if(msgDTO.isTakeIn()== null){
+            new BusinessLogicException("Merci de préciser si l'animal est mis en sécurité");
+        }
+
+        Advert advert = advertRep.findByIdAndIsActiveTrue(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
+        Message message=new Message();
+        if (advert.getIsFound()) {
+            //annonce Trouvé
+            if (msgDTO.content() !=null) {
+                message.setContent(msgDTO.content());
+            }else{
+                message.setContent(msgPerduDefault);
+            }
+        }else {
+            //annonce Perdu
+            if (msgDTO.content() !=null) {
+                message.setContent(msgDTO.content());
+            }else{
+                message.setContent(msgTrouveDefault);
+            }
+        }
+        if (msgDTO.email() !=null) {
+            message.setEmail(msgDTO.email());
+        }
+        if (msgDTO.phone() !=null) {
+            message.setPhone(msgDTO.phone());
+        }
+        if (msgDTO.phone() !=null) {
+            message.setPhone(msgDTO.phone());
+        }
+        message.setIsTakeIn(msgDTO.isTakeIn());
+        message.setDate(msgDTO.date());
+        message.setAdvert(advert);
+        msgRep.save(message);
+        return "Votre message est bien envoyé";
+    }
+
+    public String createAnswer(long id, long usrId, MsgDTO msgDTO){
+        if((msgDTO.email()== null) && (msgDTO.phone()==null)){
+            new BusinessLogicException("Merci de saisir votre adresse email et/ou votre numéro de téléphone pour"+
+                    " permettre à l'annonceur de vous contacter");
+        }
+        if(msgDTO.date()== null){
+            new BusinessLogicException("Merci de préciser la date de l'événement");
+        }
+        if(msgDTO.isTakeIn()== null){
+            new BusinessLogicException("Merci de préciser si l'animal est mis en sécurité");
+        }
+
+        Advert advert = advertRep.findByIdAndIsActiveTrue(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
+        User user = userServ.findById(usrId)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur avec ID " + id + " inconnu"));
+        if (advert.getIsFound()) {
+            //annonce Trouvé
+            answerServ.createAnswer(msgDTO,advert,user,msgPerduDefault);
+        }else {
+            answerServ.createAnswer(msgDTO,advert,user,msgTrouveDefault);
+        }
+        return "Votre message est bien envoyé";
+
+    }
+
+    public ArrayList<MsgDTO> searchAnswer(long id){
+        ArrayList<MsgDTO> lstMsgDTO = new ArrayList<MsgDTO>();
+        ArrayList<Message> lstMsg = msgRep.findByAdvertOrderByDateDesc(getById(id));
+        ArrayList<Answer> lstAnswer = answerServ.getByAdvert(getById(id));
+
+        for(Answer answer:lstAnswer){
+            lstMsgDTO.add(msgMap.answerToDTO(answer));
+        }
+        for(Message message:lstMsg){
+            lstMsgDTO.add(msgMap.msgToDTO(message));
+        }
+        Collections.sort(lstMsgDTO, new OrderByDate());
+        return lstMsgDTO;
     }
 }
