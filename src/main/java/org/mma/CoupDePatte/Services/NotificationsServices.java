@@ -42,7 +42,7 @@ public class NotificationsServices {
 
             for (User user : usersToNotify) {
                 messagingTemplate.convertAndSendToUser(
-                        user.getId().toString(), "/queue/notifications", advert
+                    user.getId().toString(), "/queue/notifications", advert
                 );
             }
         }

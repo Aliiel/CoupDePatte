@@ -14,8 +14,7 @@ public class PetServices {
     GenderRepository genderRep;
     BreedRepository breedRep;
 
-    public PetServices(PetRepository petRepository, GenderRepository genderRepository,
-                      BreedRepository breedRepository){
+    public PetServices(PetRepository petRepository, GenderRepository genderRepository, BreedRepository breedRepository){
         this.petRep = petRepository;
         this.genderRep= genderRepository;
         this.breedRep= breedRepository;
@@ -23,7 +22,7 @@ public class PetServices {
 
     public Pet getPetById(Long id){
         Pet pet = petRep.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Animal avec ID " + id + " non trouvé"));
+            .orElseThrow(() -> new ResourceNotFoundException("Animal avec ID " + id + " non trouvé"));
         return pet;
     }
 
@@ -36,9 +35,9 @@ public class PetServices {
         pet.setTattoo(petDTO.tattoo());
         pet.setIdentificationChip(petDTO.identificationChip());
         pet.setGender(genderRep.findById(petDTO.genderId())
-                .orElseThrow(()->new ResourceNotFoundException("Genre avec l'id: "+petDTO.genderId()+" inconnu")));
+            .orElseThrow(()->new ResourceNotFoundException("Genre avec l'id: "+petDTO.genderId()+" inconnu")));
         pet.setBreed(breedRep.findById(petDTO.breedId())
-                .orElseThrow(()->new ResourceNotFoundException("Race avec l'id: "+petDTO.breedId()+" inconnue")));
+            .orElseThrow(()->new ResourceNotFoundException("Race avec l'id: "+petDTO.breedId()+" inconnue")));
 
         petRep.save(pet);
         return pet;
