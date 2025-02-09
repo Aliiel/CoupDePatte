@@ -6,7 +6,6 @@ import org.mma.CoupDePatte.Models.DTO.AdvertResponseDTO;
 import org.mma.CoupDePatte.Models.DTO.FilterDTO;
 import org.mma.CoupDePatte.Models.Entities.*;
 import org.mma.CoupDePatte.Models.Mappers.AdvertMapper;
-import org.mma.CoupDePatte.Models.Mappers.FilterMapper;
 import org.mma.CoupDePatte.Models.Mappers.PetMapper;
 import org.mma.CoupDePatte.Models.Repositories.AdvertRepository;
 import org.mma.CoupDePatte.Models.Repositories.BreedRepository;
@@ -14,49 +13,68 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class AdvertServices {
     AdvertRepository advertRep;
     PetServices petServ;
-    FilterMapper filterMap;
     AdvertMapper advMap;
-    CityService cityServ;
-    UserService userServ;
+    CityServices cityServ;
+    UserServices userServ;
     PetMapper petMap;
 
-
-
     public AdvertServices(AdvertRepository advertRepository, PetServices petService,
-                          CityService cityService, UserService userService, AdvertMapper advMapper,
-                          FilterMapper filterMapper, BreedRepository breedRepository, PetMapper petMapper){
+                          CityServices cityService, UserServices userService, AdvertMapper advMapper,
+                          BreedRepository breedRepository, PetMapper petMapper){
         this.advertRep= advertRepository;
         this.petServ = petService;
         this.cityServ = cityService;
         this.userServ=userService;
         this.advMap = advMapper;
-        this.filterMap=filterMapper;
         this.petMap=petMapper;
     }
 
+    public ArrayList<Advert> findGoodList(FilterDTO filterDTO){
+        //Partie du filtre obligatoire donc avec une information
+        City city=cityServ.getByName(filterDTO.town());
+        Date eventDate = filterDTO.eventDate();
+        ArrayList<Advert> lstAdvertOK ;//Déclaration sans new ArrayList pour la charger en bloc dans if
+        //et l'utiliser en dehors du if (portabilité)
+        //fin filtre obligatoire
+
+        //Récupère la liste des annonces "Trouvé" ou "Perdu" actives
+        // en fonction de la date et de la ville renvoyées par le filtre
+        // et conditionnée sur lien avec un des animaux correspondant aux autres filtres (petServ.getPetByFilter(filterDTO))
+        //Utilisation de la requète dynamique (petServ.getPetByFilterSpec(filterDTO))
+        if(filterDTO.isTrouve()) {
+            lstAdvertOK = advertRep.findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundTrueAndPetInOrderByEventDateDesc
+                    (city, eventDate, petServ.getPetByFilterSpec(filterDTO));
+        }else {
+            lstAdvertOK = advertRep.findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundFalseAndPetInOrderByEventDateDesc
+                    (city, eventDate, petServ.getPetByFilterSpec(filterDTO));
+        }
+        return lstAdvertOK;
+
+    }
 
     public AdvertResponseDTO getById(Long id) {
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
-
         return advMap.AdvertToResponseDTO(advert);
 
     }
 
+    public ArrayList<AdvertResponseDTO> getByFilter(FilterDTO filterDTO) {
+        ArrayList<Advert> lstAdvert= findGoodList(filterDTO);
+        if(lstAdvert.size()==0){
+            new ResourceNotFoundException("Aucune annonce ne correspond à votre sélection");
+        }
 
-    public List<AdvertResponseDTO> getByFilter(FilterDTO filterDTO) {
-        ArrayList<Advert> lstAdvert= filterMap.findGoodList(filterDTO);
         ArrayList<AdvertResponseDTO> lstResponse = new ArrayList<>();
         for(Advert advert: lstAdvert){
             lstResponse.add(advMap.AdvertToResponseDTO(advert));
         }
-        return new lstResponse;
+        return lstResponse;
 
     }
 
@@ -102,18 +120,7 @@ public class AdvertServices {
         }
 
         advertRep.save(advert);
+        return advMap.AdvertToResponseDTO(advert);
 
-        return new AdvertResponseDTO(
-                advert.getEventDate(),
-                advert.getDescription(),
-                advert.getPhotoUrl(),
-                advert.getIsActive(),
-                advert.getIsTakeIn(),
-                advert.getIsFound(),
-                advert.getCity().getName(),
-                petMap.petToResponseDTO(advert.getPet()),
-                advert.getCreationDate(),
-                advert.getUpdateDate()
-                );
     }
 }

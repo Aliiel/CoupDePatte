@@ -17,12 +17,12 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     //Annonces "Trouvé"
     ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundTrue
             (City city, Date eventDate);
-    ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundTrueAndPetIn
+    ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundTrueAndPetInOrderByEventDateDesc
             (City city, Date eventDate, ArrayList<Pet> pets);
     //Annonces "Perdu"
     ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundFalse
     (City city, Date eventDate);
-    ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundFalseAndPetIn
+    ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundFalseAndPetInOrderByEventDateDesc
             (City city, Date eventDate,ArrayList<Pet> pets);
 
 }

@@ -15,7 +15,7 @@ public class GenderServices {
 
     public Gender getById(long id){
         return genderRep.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Genre avec ID " + id + " non prévu"));
+                .orElseThrow(() -> new ResourceNotFoundException("Genre avec ID " + id + " inconnu"));
     }
 
     public Gender getByName(String name){
