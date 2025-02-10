@@ -5,10 +5,10 @@ import org.mma.CoupDePatte.Models.Repositories.SpecieRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SpecieServices {
+public class SpecieService {
    SpecieRepository specieRep;
 
-   public SpecieServices(SpecieRepository specieRepository){
+   public SpecieService(SpecieRepository specieRepository){
        this.specieRep=specieRepository;
    }
 

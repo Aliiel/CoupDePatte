@@ -20,23 +20,23 @@ import java.util.Collections;
 import java.util.Date;
 
 @Service
-public class AdvertServices {
+public class AdvertService {
     AdvertRepository advertRep;
-    PetServices petServ;
+    PetService petServ;
     AdvertMapper advMap;
-    CityServices cityServ;
-    UserServices userServ;
+    CityService cityServ;
+    UserService userServ;
     MessageRepository msgRep;
-    AnswerServices answerServ;
+    AnswerService answerServ;
     MsgMapper msgMap;
     PetMapper petMap;
     String msgTrouveDefault;
     String msgPerduDefault;
 
-    public AdvertServices(AdvertRepository advertRepository, PetServices petService,
-                            CityServices cityService, UserServices userService, AdvertMapper advMapper,
-                            PetMapper petMapper, MsgMapper msgMapper,
-                            MessageRepository msgRepository, AnswerServices answerService){
+    public AdvertService(AdvertRepository advertRepository, PetService petService,
+                         CityService cityService, UserService userService, AdvertMapper advMapper,
+                         PetMapper petMapper, MsgMapper msgMapper,
+                         MessageRepository msgRepository, AnswerService answerService){
         this.advertRep= advertRepository;
         this.msgRep= msgRepository;
         this.petServ = petService;

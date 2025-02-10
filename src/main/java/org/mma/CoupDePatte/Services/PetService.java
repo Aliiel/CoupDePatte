@@ -13,15 +13,15 @@ import static org.springframework.data.jpa.domain.Specification.*;
 import java.util.ArrayList;
 
 @Service
-public class PetServices {
+public class PetService {
     PetRepository petRep;
-    BreedServices breedServ;
-    GenderServices genderServ;
-    SpecieServices specieServ;
+    BreedService breedServ;
+    GenderService genderServ;
+    SpecieService specieServ;
     PetMapper petMap;
 
-    public PetServices(PetRepository petRepository, PetMapper petMapper, BreedServices breedService,
-                       SpecieServices specieService,GenderServices genderService){
+    public PetService(PetRepository petRepository, PetMapper petMapper, BreedService breedService,
+                      SpecieService specieService, GenderService genderService){
         this.petRep = petRepository;
         this.petMap= petMapper;
         this.breedServ = breedService;

@@ -10,7 +10,7 @@ import org.mma.CoupDePatte.Models.Entities.Breed;
 import org.mma.CoupDePatte.Models.Entities.Gender;
 import org.mma.CoupDePatte.Models.Entities.Pet;
 import org.mma.CoupDePatte.Models.Entities.Specie;
-import org.mma.CoupDePatte.Services.PetServices;
+import org.mma.CoupDePatte.Services.PetService;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 class TestPetController {
     private MockMvc mockMvc;
     @Mock
-    private PetServices petServ;
+    private PetService petServ;
     @InjectMocks
     private PetController petCtrl;
 

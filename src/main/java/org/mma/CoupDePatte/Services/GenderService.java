@@ -6,10 +6,10 @@ import org.mma.CoupDePatte.Models.Repositories.GenderRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GenderServices {
+public class GenderService {
     GenderRepository genderRep;
 
-    public GenderServices(GenderRepository genderRepository){
+    public GenderService(GenderRepository genderRepository){
         this.genderRep=genderRepository;
     }
 

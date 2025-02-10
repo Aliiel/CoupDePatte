@@ -12,16 +12,17 @@ import java.util.ArrayList;
 
 
 @Service
-public class AnswerServices {
+public class AnswerService {
     AnswerRepository answerRep;
 
-    public AnswerServices(AnswerRepository answerRepository){
+    public AnswerService(AnswerRepository answerRepository){
         this.answerRep=answerRepository;
 
     }
 
     public ArrayList<Answer> getByAdvert(Advert advert){
-        answerRep.findByAnswerOrderByDateDesc(advert);
+
+        return answerRep.findByAnswerOrderByDateDesc(advert);
     }
 
     public void createAnswer(MsgDTO msgDTO, Advert advert, User user,String msgDefault) {
