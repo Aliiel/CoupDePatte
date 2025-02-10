@@ -38,5 +38,4 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "advert_id")
     private Advert advert;
-
 }
