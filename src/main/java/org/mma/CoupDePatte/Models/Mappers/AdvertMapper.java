@@ -2,7 +2,9 @@ package org.mma.CoupDePatte.Models.Mappers;
 
 import org.mma.CoupDePatte.Models.DTO.AdvertResponseDTO;
 import org.mma.CoupDePatte.Models.Entities.Advert;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AdvertMapper {
     PetMapper petMap;
 

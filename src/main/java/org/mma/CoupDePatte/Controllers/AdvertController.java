@@ -15,8 +15,8 @@ import java.util.List;
 public class AdvertController {
     AdvertService advServ;
 
-    public AdvertController(AdvertService advService){
-        this.advServ = advService;
+    public AdvertController(AdvertService advServices){
+        this.advServ = advServices;
     }
 
 
