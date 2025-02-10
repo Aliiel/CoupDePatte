@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class NotificationsServices {
+public class NotificationsService {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final AdvertRepository advertRepository;
     private final MessageRepository messageRepository;
 
     @Autowired
-    public NotificationsServices(SimpMessagingTemplate messagingTemplate, AdvertRepository advertRepository,
-        MessageRepository messageRepository) {
+    public NotificationsService(SimpMessagingTemplate messagingTemplate, AdvertRepository advertRepository,
+                                MessageRepository messageRepository) {
         this.messagingTemplate = messagingTemplate;
         this.advertRepository = advertRepository;
         this.messageRepository = messageRepository;

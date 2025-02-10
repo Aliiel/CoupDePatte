@@ -14,8 +14,9 @@ public class CoupDePatteApplication implements CommandLineRunner {
 	RoleRepository roleRep;
 	SpecieRepository specieRep;
 	BreedRepository breedRep;
+
 	public CoupDePatteApplication(GenderRepository genderRepository, RoleRepository roleRepository,
-					   SpecieRepository specieRepository, BreedRepository breedRepository){
+   		SpecieRepository specieRepository, BreedRepository breedRepository){
 		this.genderRep = genderRepository;
 		this.specieRep = specieRepository;
 		this.breedRep = breedRepository;
