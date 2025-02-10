@@ -34,10 +34,10 @@ public class Pet {
     private String coatColor;
 
     @Column(name ="tattoo")
-    private Boolean tattoo;
+    private Boolean tattoo = false;
 
     @Column(name = "identification_chip")
-    private Boolean identificationChip;
+    private Boolean identificationChip = false;
 
     @ManyToOne
     @JoinColumn(name = "gender_id")
