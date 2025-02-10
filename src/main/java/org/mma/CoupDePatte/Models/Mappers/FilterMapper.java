@@ -4,9 +4,6 @@ import org.mma.CoupDePatte.Models.DTO.FilterDTO;
 import org.mma.CoupDePatte.Models.Entities.*;
 import org.mma.CoupDePatte.Models.Repositories.AdvertRepository;
 import org.mma.CoupDePatte.Models.Repositories.PetRepository;
-import org.mma.CoupDePatte.Services.BreedService;
-import org.mma.CoupDePatte.Services.GenderService;
-import org.mma.CoupDePatte.Services.SpecieService;
 
 import java.util.ArrayList;
 import java.util.Date;

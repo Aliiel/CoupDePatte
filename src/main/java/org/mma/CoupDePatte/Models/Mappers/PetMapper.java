@@ -3,8 +3,6 @@ package org.mma.CoupDePatte.Models.Mappers;
 import org.mma.CoupDePatte.Models.DTO.PetDTO;
 import org.mma.CoupDePatte.Models.DTO.PetResponseDTO;
 import org.mma.CoupDePatte.Models.Entities.Pet;
-import org.mma.CoupDePatte.Services.BreedService;
-import org.mma.CoupDePatte.Services.GenderService;
 
 
 public class PetMapper {
