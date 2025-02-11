@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface BreedRepository extends JpaRepository<Breed, Long> {
 
     Optional<Breed> findById(Long id);
+
     Optional<Breed> findByName(String name);
     ArrayList<Breed> findBySpecie(Specie specie);
 }

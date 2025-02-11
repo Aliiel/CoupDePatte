@@ -255,3 +255,5 @@ public class AdvertService {
         return lstMsgDTO;
     }
 }
+
+        notificationsService.sendNewAdvertNotification(advert);

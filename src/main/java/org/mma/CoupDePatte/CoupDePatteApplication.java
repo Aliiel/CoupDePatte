@@ -1,7 +1,13 @@
 package org.mma.CoupDePatte;
 
-import org.mma.CoupDePatte.Models.Entities.*;
-import org.mma.CoupDePatte.Models.Repositories.*;
+import org.mma.CoupDePatte.Models.Entities.Breed;
+import org.mma.CoupDePatte.Models.Entities.Gender;
+import org.mma.CoupDePatte.Models.Entities.Role;
+import org.mma.CoupDePatte.Models.Entities.Specie;
+import org.mma.CoupDePatte.Models.Repositories.BreedRepository;
+import org.mma.CoupDePatte.Models.Repositories.GenderRepository;
+import org.mma.CoupDePatte.Models.Repositories.RoleRepository;
+import org.mma.CoupDePatte.Models.Repositories.SpecieRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,41 +27,38 @@ public class CoupDePatteApplication implements CommandLineRunner {
 		this.breedRep = breedRepository;
 	}
 
-	public static void main(String[] args) {
-		SpringApplication.run(CoupDePatteApplication.class, args);
-	}
+    public CoupDePatteApplication(GenderRepository genderRepository, RoleRepository roleRepository,
+                                  SpecieRepository specieRepository, BreedRepository breedRepository) {
+        this.genderRep = genderRepository;
+        this.specieRep = specieRepository;
+        this.breedRep = breedRepository;
+        this.roleRep = roleRepository;
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
-		if (genderRep.count() == 0) {
-			initializeData();
-		}
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CoupDePatteApplication.class, args);
+    }
 
-	private void initializeData() {
-		// Crée les enregistrements de la table gender
-		Gender gender1 = new Gender(null,"femelle");
-		Gender gender2 = new Gender(null,"mâle");
-		genderRep.saveAll(List.of(gender1,gender2));
+    @Override
+    public void run(String... args) throws Exception {
+        if (genderRep.count() == 0) {
+            initializeData();
+        }
+    }
 
 		// Crée les enregistrements de la table specie
 		Specie specie1 = new Specie(null,"chat");
 		Specie specie2 = new Specie(null,"chien");
 		specieRep.saveAll(List.of(specie1,specie2));
 
-		// Crée les enregistrements de la table breed
-		Specie spChat = specieRep.findByName("chat");
-		Specie spChien = specieRep.findByName("chien");
+        // Crée les enregistrements de la table specie
+        Specie specie1 = new Specie(null, "chat");
+        Specie specie2 = new Specie(null, "chien");
+        specieRep.saveAll(List.of(specie1, specie2));
 
-		Breed breed1 = new Breed(null,"européen",spChat);
-		Breed breed2 = new Breed(null,"bâtard",spChien);
-		Breed breed3 = new Breed(null,"bengal",spChat);
-		Breed breed4 = new Breed(null,"siamois",spChat);
-		Breed breed5 = new Breed(null,"main coon",spChat);
-		Breed breed6 = new Breed(null,"chartreux",spChat);
-		Breed breed7 = new Breed(null,"sphynx",spChat);
-		Breed breed8 = new Breed(null,"scottish fold",spChat);
-		Breed breed9 = new Breed(null,"persan",spChat);
+        // Crée les enregistrements de la table breed
+        Specie spChat = specieRep.findByName("chat");
+        Specie spChien = specieRep.findByName("chien");
 
 		Breed breed10 = new Breed(null,"inconnu",spChien);
 		Breed breed12 = new Breed(null,"labrador",spChien);

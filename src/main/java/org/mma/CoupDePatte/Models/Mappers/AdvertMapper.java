@@ -14,7 +14,7 @@ public class AdvertMapper {
         this.cityMap=cityMapper;
     }
 
-    public AdvertResponseDTO AdvertToResponseDTO (Advert advert) {
+    public AdvertResponseDTO AdvertToResponseDTO(Advert advert) {
         return new AdvertResponseDTO(
                 advert.getEventDate(),
                 advert.getDescription(),

@@ -12,22 +12,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/adverts")
 public class AdvertController {
     AdvertService advServ;
 
-    public AdvertController(AdvertService advService){
-        this.advServ = advService;
+    public AdvertController(AdvertService advServices) {
+        this.advServ = advServices;
     }
 
-
-    @GetMapping("/")
-    public ResponseEntity<List<AdvertResponseDTO>> getAdvertByFilter(@RequestBody FilterDTO filterDTO){
-        return ResponseEntity.status(HttpStatus.FOUND).body(advServ.getByFilter(filterDTO));
-
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<AdvertResponseDTO> getAdvertbyId(@PathVariable long id){
@@ -36,7 +29,7 @@ public class AdvertController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<String> newAdvert(@RequestBody AdvertDTO advertDTO){
+    public ResponseEntity<String> newAdvert(@RequestBody AdvertDTO advertDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(advServ.createAdvert(advertDTO));
 
     }

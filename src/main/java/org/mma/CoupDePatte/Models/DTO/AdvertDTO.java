@@ -11,4 +11,5 @@ public record AdvertDTO(
         String email,
         CityDTO cityDTO,
         PetDTO petDTO
-){}
+) {
+}

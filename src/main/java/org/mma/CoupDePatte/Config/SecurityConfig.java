@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private static final String [] AUTH_WHITELIST = {
+    private static final String[] AUTH_WHITELIST = {
             "/auth/authenticate",
             "/auth/register",
             "/users"
@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-                return http.build();
+        return http.build();
     }
 
  */

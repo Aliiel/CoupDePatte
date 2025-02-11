@@ -1,5 +1,6 @@
 package org.mma.CoupDePatte.Services;
 
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.mma.CoupDePatte.Exceptions.InvalidCredentialsException;
@@ -39,7 +40,6 @@ public class UserService {
     private final UserMapper userMapper;
     private final CityMapper cityMapper;
     private final RoleRepository roleRepository;
-
 
 
     public RegistrationResponse createUser(UserDTO userDTO) {
@@ -133,9 +133,12 @@ public class UserService {
 
 
     private boolean isPasswordStrong(String password) {
-
         String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$";
-
         return password.matches(regex);
+
+    }
+
+    public User getById(Long id) {
+        return userRepository.getUserById(id);
     }
 }
