@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,16 +15,6 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-
-    /*
-    @PostMapping("/new")
-    public ResponseEntity<RegistrationResponse> createUser(@RequestBody UserDTO userDTO) {
-
-        RegistrationResponse registrationResponse = userService.createUser(userDTO);
-        return ResponseEntity.ok(registrationResponse);
-    }
-
-     */
 
 
     @GetMapping("/all")

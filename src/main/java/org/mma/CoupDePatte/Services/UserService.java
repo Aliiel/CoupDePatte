@@ -3,10 +3,7 @@ package org.mma.CoupDePatte.Services;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mma.CoupDePatte.Exceptions.InvalidCredentialsException;
-import org.mma.CoupDePatte.Exceptions.InvalidPasswordException;
-import org.mma.CoupDePatte.Exceptions.UserAlreadyExistsException;
-import org.mma.CoupDePatte.Exceptions.UserNotFoundException;
+import org.mma.CoupDePatte.Exceptions.*;
 import org.mma.CoupDePatte.Models.DTO.*;
 import org.mma.CoupDePatte.Models.Entities.City;
 import org.mma.CoupDePatte.Models.Entities.Role;
@@ -43,6 +40,30 @@ public class UserService {
     private final RoleRepository roleRepository;
 
 
+    // méthode pour créer un utilisateur à partir de username, password et email
+    public RegistrationResponse registerUser(RegistrationRequest registrationRequest) {
+
+        Optional<User> existingUser = userRepository.findByEmail(registrationRequest.email());
+        if (existingUser.isPresent()) {
+            throw new UserAlreadyExistsException(HttpStatus.CONFLICT.value());
+        }
+
+        if (!isPasswordStrong(registrationRequest.password())) {
+            throw new InvalidPasswordException(HttpStatus.BAD_REQUEST.value());
+        }
+
+        User user = new User();
+        user.setUsername(registrationRequest.username());
+        user.setEmail(registrationRequest.email());
+        user.setPassword(passwordEncoder.encode(registrationRequest.password()));
+        Optional<Role> role = roleRepository.findByName("USER");
+        role.ifPresent(user::setRole);
+        userRepository.save(user);
+        final String token = jwtService.generateToken(user);
+
+        return new RegistrationResponse(token, user.getUsername(), user.getEmail(), user.getRole().getName());
+    }
+
 
     public UserDTO updateUser(Long id, UserDTO userDTO) {
 
@@ -73,31 +94,6 @@ public class UserService {
     }
 
 
-    // méthode pour créer un utilisateur à partir de username, password et email
-    public RegistrationResponse registerUser(RegistrationRequest registrationRequest) {
-
-        Optional<User> existingUser = userRepository.findByEmail(registrationRequest.email());
-        if (existingUser.isPresent()) {
-            throw new UserAlreadyExistsException(HttpStatus.CONFLICT.value());
-        }
-
-        if (!isPasswordStrong(registrationRequest.password())) {
-            throw new InvalidPasswordException(HttpStatus.BAD_REQUEST.value());
-        }
-
-        User user = new User();
-        user.setUsername(registrationRequest.username());
-        user.setEmail(registrationRequest.email());
-        user.setPassword(passwordEncoder.encode(registrationRequest.password()));
-        Optional<Role> role = roleRepository.findByName("USER");
-        role.ifPresent(user::setRole);
-        userRepository.save(user);
-        final String token = jwtService.generateToken(user);
-
-        return new RegistrationResponse(token, user.getUsername(), user.getEmail(), user.getRole().getName());
-    }
-
-
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll()
                 .stream()
@@ -106,7 +102,13 @@ public class UserService {
     }
 
 
-    // méthode pour s'authentifier
+    public User getByEmail(String email){
+         User user = userRepository.findByEmail(email)
+                        .orElseThrow(() -> new ResourceNotFoundException("Utilisateur avec email " + email + " inconnu"));
+                return user;
+    }
+
+
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
         try {
@@ -126,7 +128,6 @@ public class UserService {
     }
 
 
-
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException(HttpStatus.NOT_FOUND.value());
@@ -141,5 +142,11 @@ public class UserService {
         String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$";
 
         return password.matches(regex);
+
+    }
+
+
+    public User getById(Long id) {
+        return userRepository.getUserById(id);
     }
 }
