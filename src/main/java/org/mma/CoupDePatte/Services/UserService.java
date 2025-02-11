@@ -43,42 +43,6 @@ public class UserService {
     private final RoleRepository roleRepository;
 
 
-    // méthode pour créer un utilisateur
-    /*
-    public RegistrationResponse createUser(UserDTO userDTO) {
-
-        Optional<User> existingUser = userRepository.findByEmail(userDTO.getEmail());
-        if (existingUser.isPresent()) {
-            throw new UserAlreadyExistsException(HttpStatus.CONFLICT.value());
-        }
-
-        if (!isPasswordStrong(userDTO.getPassword())) {
-            throw new InvalidPasswordException(HttpStatus.BAD_REQUEST.value());
-        }
-
-        CityDTO cityDTO = userDTO.getCity();
-        log.info("city recup de la saisie : " + cityDTO.getName() + " - " + cityDTO.getZipCode());
-
-        Optional<City> existingCity = cityRepository.findCity(cityDTO.getName(), cityDTO.getZipCode());
-
-        City city = existingCity.orElseGet(() -> cityRepository.save(cityMapper.toEntity(cityDTO)));
-
-        User user = userMapper.toEntity(userDTO);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        Optional<Role> role = roleRepository.findByName("USER");
-        role.ifPresent(user::setRole);
-
-        user.setCity(city);
-
-        userRepository.save(user);
-
-        final String token = jwtService.generateToken(user);
-
-        return new RegistrationResponse(token, userDTO.getUsername(), userDTO.getEmail(), userDTO.getRole().getName());
-    }
-
-     */
 
     public UserDTO updateUser(Long id, UserDTO userDTO) {
 
@@ -161,35 +125,6 @@ public class UserService {
         }
     }
 
-
-    /*
-    public Optional<UserDTO> updateUser(Long id, UserDTO userDTO) {
-
-        return userRepository.findById(id).map(existingUser -> {
-            userMapper.partialUpdate(userDTO, existingUser);
-
-            if (userDTO.getCity() != null) {
-                CityDTO cityDTO = userDTO.getCity();
-                log.info("City récupérée : " + cityDTO.getName() + " - " + cityDTO.getZipCode());
-
-                Optional<City> existingCity = cityRepository.findCity(cityDTO.getName(), cityDTO.getZipCode());
-
-                City city = existingCity.orElseGet(() -> {
-                    City newCity = cityMapper.toEntity(cityDTO);
-                    newCity = cityRepository.save(newCity);
-                    cityRepository.flush();
-                    return newCity;
-                });
-
-                existingUser.setCity(city);
-            }
-
-            User updatedUser = userRepository.save(existingUser);
-            return userMapper.toUserDTO(updatedUser);
-        });
-    }
-
-     */
 
 
     public void deleteUser(Long id) {
