@@ -19,7 +19,7 @@ public class NotificationsService {
 
     @Autowired
     public NotificationsService(SimpMessagingTemplate messagingTemplate, AdvertRepository advertRepository,
-                                MessageRepository messageRepository) {
+        MessageRepository messageRepository) {
         this.messagingTemplate = messagingTemplate;
         this.advertRepository = advertRepository;
         this.messageRepository = messageRepository;
@@ -31,11 +31,28 @@ public class NotificationsService {
             List<Advert> adverts = advertRepository.findUsersByMatchingFoundAdverts(advert.getCity().getId(), breedId);
 
             // Envoyer la notification à chaque utilisateur concerné
+
             List<User> users = adverts.stream().map(Advert::getUser).toList();
             for (User user : users) {
                 messagingTemplate.convertAndSendToUser(
                         user.getId().toString(), "/queue/notifications", advert
 
+                );
+            }
+        }
+    }
+
+    public void sendNewFoundAdvertNotification(Advert advert) {
+        if (advert.getIsFound()) { // On ne notifie que si c'est un animal trouvé
+            Long breedId = advert.getPet().getBreed().getId(); // Récupère l'ID de la breed de l'animal trouvé
+            List<User> usersToNotify = advertRepository.findUsersByMatchingLostAdverts(advert.getCity().getId(), breedId);
+
+            // Envoyer la notification à chaque utilisateur concerné
+            for (User user : usersToNotify) {
+                messagingTemplate.convertAndSendToUser(
+                        user.getId().toString(),
+                        "/queue/notifications",
+                        advert
                 );
             }
         }
