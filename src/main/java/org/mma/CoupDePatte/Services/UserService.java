@@ -1,5 +1,6 @@
 package org.mma.CoupDePatte.Services;
 
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.mma.CoupDePatte.Exceptions.InvalidCredentialsException;
@@ -131,5 +132,9 @@ public class UserService {
         String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$";
 
         return password.matches(regex);
+
+}
+      public User getById(Long id) {
+        return userRepository.getUserById(id);
     }
 }

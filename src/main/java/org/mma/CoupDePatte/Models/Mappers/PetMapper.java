@@ -4,14 +4,23 @@ import org.mma.CoupDePatte.Models.DTO.PetDTO;
 import org.mma.CoupDePatte.Models.DTO.PetResponseDTO;
 import org.mma.CoupDePatte.Models.Entities.Pet;
 
+import org.mma.CoupDePatte.Services.BreedService;
+import org.mma.CoupDePatte.Services.GenderService;
+import org.springframework.stereotype.Component;
+
+@Component
+public class PetMapper {
+
+    GenderService genderServ;
+    BreedService breedServ;
 
 public class PetMapper {
     GenderService genderServ;
     BreedService breedServ;
 
     public PetMapper (BreedService breedService, GenderService genderService){
-        this.genderServ=genderService;
-        this.breedServ=breedService;
+        this.genderServ = genderService;
+        this.breedServ = breedService;
     }
 
     public PetDTO petToDTO (Pet pet){
