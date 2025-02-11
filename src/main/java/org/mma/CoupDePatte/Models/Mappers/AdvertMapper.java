@@ -2,14 +2,16 @@ package org.mma.CoupDePatte.Models.Mappers;
 
 import org.mma.CoupDePatte.Models.DTO.AdvertResponseDTO;
 import org.mma.CoupDePatte.Models.Entities.Advert;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class AdvertMapper {
     PetMapper petMap;
+    CityMapper cityMap;
 
-    public AdvertMapper(PetMapper petMapper) {
-        this.petMap = petMapper;
+    public AdvertMapper(PetMapper petMapper, CityMapper cityMapper){
+        this.petMap=petMapper;
+        this.cityMap=cityMapper;
     }
 
     public AdvertResponseDTO AdvertToResponseDTO(Advert advert) {
@@ -20,7 +22,7 @@ public class AdvertMapper {
                 advert.getIsActive(),
                 advert.getIsTakeIn(),
                 advert.getIsFound(),
-                advert.getCity().getName(),
+                cityMap.toCityDTO(advert.getCity()),
                 petMap.petToResponseDTO(advert.getPet()),
                 advert.getCreationDate(),
                 advert.getUpdateDate()

@@ -17,21 +17,20 @@ import java.util.Optional;
 public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
     Optional<Advert> findByIdAndIsActiveTrue(Long id);
+    Optional<Advert> findByIdAndIsActiveFalse(Long id);
 
     //Annonces "Trouvé"
 
     ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundTrue
             (City city, Date eventDate);
-
-    ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundTrueAndPetIn
+    ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundTrueAndPetInOrderByEventDateDesc
             (City city, Date eventDate, ArrayList<Pet> pets);
     //Annonces "Perdu"
 
     ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundFalse
-            (City city, Date eventDate);
-
-    ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundFalseAndPetIn
-            (City city, Date eventDate, ArrayList<Pet> pets);
+    (City city, Date eventDate);
+    ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundFalseAndPetInOrderByEventDateDesc
+            (City city, Date eventDate,ArrayList<Pet> pets);
 
 
     @Query("SELECT DISTINCT a FROM Advert a WHERE a.isFound = true AND a.city.id = :cityId AND a.pet.breed.id = :breedId")

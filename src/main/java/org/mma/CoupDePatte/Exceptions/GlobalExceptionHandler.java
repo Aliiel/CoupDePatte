@@ -1,15 +1,27 @@
-package org.mma.CoupDePatte.Exceptions.Handler;
+package org.mma.CoupDePatte.Exceptions;
 
-import org.mma.CoupDePatte.Exceptions.InvalidCredentialsException;
-import org.mma.CoupDePatte.Exceptions.InvalidPasswordException;
-import org.mma.CoupDePatte.Exceptions.UserAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
+
+        @ExceptionHandler(ResourceNotFoundException.class)
+        public ResponseEntity<String> handleResourceNotFound(ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
+        @ExceptionHandler(BusinessLogicException.class)
+        public ResponseEntity<String> handleBusinessLogicException(BusinessLogicException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<String> handleGenericException(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur interne s'est produite");
+        }
 
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<String> handleInvalidPasswordException(InvalidPasswordException ex) {
@@ -25,4 +37,5 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleInvalidCredentialsException(InvalidCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
+
 }

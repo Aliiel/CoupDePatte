@@ -9,7 +9,7 @@ public record AdvertResponseDTO(
         Boolean isActive,
         Boolean isTakeIn,
         Boolean isFound,
-        String cityName,
+        CityDTO cityDTO,
         PetResponseDTO petRespDTO,
         Date creationDate,
         Date updateDate

@@ -54,8 +54,8 @@ public class PetMapper {
         pet.setCoatColor(petDTO.coatColor());
         pet.setTattoo(petDTO.tattoo());
         pet.setIdentificationChip(petDTO.identificationChip());
-        pet.setBreed(breedServ.getById(petDTO.breedId()));
         pet.setGender(genderServ.getById(petDTO.genderId()));
+        pet.setBreed(breedServ.getById(petDTO.breedId()));
 
         return pet;
     }
