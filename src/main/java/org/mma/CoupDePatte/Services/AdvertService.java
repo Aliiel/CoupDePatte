@@ -32,13 +32,15 @@ public class AdvertService {
     PetMapper petMap;
     String msgTrouveDefault;
     String msgPerduDefault;
+    NotificationsService notificationsServ;
 
     public AdvertService(AdvertRepository advertRepository, PetService petService,
                          CityService cityService, UserService userService, AdvertMapper advMapper,
                          PetMapper petMapper, MsgMapper msgMapper,
-                         MessageRepository msgRepository, AnswerService answerService){
+                         MessageRepository msgRepository, AnswerService answerService, NotificationsService notificationsServ ) {
         this.advertRep= advertRepository;
         this.msgRep= msgRepository;
+        this.notificationsServ= notificationsServ;
         this.petServ = petService;
         this.cityServ = cityService;
         this.userServ=userService;
@@ -116,7 +118,7 @@ public class AdvertService {
         advert.setPet(petServ.createPet(advertDTO.petDTO()));
         advertRep.save(advert);
         Long advertId = advert.getId();
-
+        notificationsServ.sendNewAdvertNotification(advert);
         return "Votre annonce a bien été créée sous la référence "+Long.toString(advertId);
     }
 
@@ -256,4 +258,3 @@ public class AdvertService {
     }
 }
 
-        notificationsService.sendNewAdvertNotification(advert);
