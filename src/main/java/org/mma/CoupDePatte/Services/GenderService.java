@@ -22,4 +22,5 @@ public class GenderService {
         return genderRep.findByName(name)
                 .orElseThrow(() -> new ResourceNotFoundException("Genre avec nom " + name + " non prévu"));
     }
+
 }

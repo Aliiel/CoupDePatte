@@ -18,30 +18,30 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class AdvertServices {
+public class AdvertService {
 
     AdvertRepository advertRep;
-    PetServices petServ;
+    PetService petServ;
     FilterMapper filterMap;
     AdvertMapper advMap;
-    CityServices cityServ;
-    UserServices userServ;
+    CityService cityServ;
+    UserService userServ;
     PetMapper petMap;
 
-    private final NotificationsServices notificationsServices;
+    private final NotificationsService notificationsService;
 
     @Autowired
-    public AdvertServices(AdvertRepository advertRepository, PetServices petServices,
-        CityServices cityServices, UserServices userServices, AdvertMapper advMapper,
-        FilterMapper filterMapper, BreedRepository breedRepository, PetMapper petMapper, NotificationsServices notificationsServices){
+    public AdvertService(AdvertRepository advertRepository, PetService petService,
+                         CityService cityService, UserService userService, AdvertMapper advMapper,
+                         FilterMapper filterMapper, BreedRepository breedRepository, PetMapper petMapper, NotificationsService notificationsService){
         this.advertRep = advertRepository;
-        this.petServ = petServices;
-        this.cityServ = cityServices;
-        this.userServ = userServices;
+        this.petServ = petService;
+        this.cityServ = cityService;
+        this.userServ = userService;
         this.advMap = advMapper;
         this.filterMap = filterMapper;
         this.petMap = petMapper;
-        this.notificationsServices = notificationsServices;
+        this.notificationsService = notificationsService;
     }
 
 
@@ -81,7 +81,7 @@ public class AdvertServices {
 
         // Appeler la méthode pour envoyer des notifications
 
-        notificationsServices.sendNewAdvertNotification(advert);
+        notificationsService.sendNewAdvertNotification(advert);
 
         Long advertId = advert.getId();
         return "Votre annonce a bien été créée sous la référence " + advertId;

@@ -9,12 +9,12 @@ import org.mma.CoupDePatte.Models.Repositories.PetRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PetServices {
+public class PetService {
     PetRepository petRep;
     GenderRepository genderRep;
     BreedRepository breedRep;
 
-    public PetServices(PetRepository petRepository, GenderRepository genderRepository,
+    public PetService(PetRepository petRepository, GenderRepository genderRepository,
                       BreedRepository breedRepository){
         this.petRep = petRepository;
         this.genderRep= genderRepository;
