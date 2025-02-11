@@ -4,16 +4,15 @@ import org.mma.CoupDePatte.Models.DTO.FilterDTO;
 import org.mma.CoupDePatte.Models.Entities.*;
 import org.mma.CoupDePatte.Models.Repositories.AdvertRepository;
 import org.mma.CoupDePatte.Models.Repositories.PetRepository;
+
 import org.mma.CoupDePatte.Services.BreedService;
 import org.mma.CoupDePatte.Services.CityService;
 import org.mma.CoupDePatte.Services.GenderService;
 import org.mma.CoupDePatte.Services.SpecieService;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.Date;
 
-@Component
 public class FilterMapper {
     AdvertRepository advertRep;
     SpecieService specieServ;
@@ -24,11 +23,12 @@ public class FilterMapper {
 
     public FilterMapper(AdvertRepository advertRepository, SpecieService specieService, CityService cityService,
                         GenderService genderService, BreedService breedService, PetRepository petRepository){
-        this.specieServ = specieService;
-        this.breedServ = breedService;
+
+        this.specieServ=specieService;
+        this.breedServ=breedService;
         this.cityServ = cityService;
         this.genderServ = genderService;
-        this.advertRep = advertRepository;
+        this.advertRep= advertRepository;
         this.petRep = petRepository;
     }
     public ArrayList<Advert> findGoodList(FilterDTO filterDTO){

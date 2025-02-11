@@ -14,6 +14,9 @@ public class PetMapper {
     GenderService genderServ;
     BreedService breedServ;
 
+public class PetMapper {
+    GenderService genderServ;
+    BreedService breedServ;
 
     public PetMapper (BreedService breedService, GenderService genderService){
         this.genderServ = genderService;
@@ -51,6 +54,7 @@ public class PetMapper {
 
     public Pet DTOToPet (PetDTO petDTO){
         Pet pet = new Pet();
+
         pet.setName(petDTO.name());
         pet.setBehavior(petDTO.behavior());
         pet.setEyesColor(petDTO.eyesColor());
