@@ -3,7 +3,6 @@ package org.mma.CoupDePatte.Services;
 import org.mma.CoupDePatte.Exceptions.ResourceNotFoundException;
 import org.mma.CoupDePatte.Models.DTO.AdvertDTO;
 import org.mma.CoupDePatte.Models.DTO.AdvertResponseDTO;
-import org.mma.CoupDePatte.Models.DTO.FilterDTO;
 import org.mma.CoupDePatte.Models.Entities.Advert;
 import org.mma.CoupDePatte.Models.Mappers.AdvertMapper;
 import org.mma.CoupDePatte.Models.Mappers.FilterMapper;
@@ -13,13 +12,12 @@ import org.mma.CoupDePatte.Models.Repositories.BreedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class AdvertService {
 
+    private final NotificationsService notificationsService;
     AdvertRepository advertRep;
     PetService petServ;
     FilterMapper filterMap;
@@ -28,18 +26,14 @@ public class AdvertService {
     UserService userServ;
     PetMapper petMap;
 
-    private final NotificationsService notificationsService;
-
     @Autowired
     public AdvertService(AdvertRepository advertRepository, PetService petService,
-                         CityService cityService, UserService userService, AdvertMapper advMapper,
-                         FilterMapper filterMapper, BreedRepository breedRepository, PetMapper petMapper, NotificationsService notificationsService){
+                         CityService cityService, UserService userService, AdvertMapper advMapper, BreedRepository breedRepository, PetMapper petMapper, NotificationsService notificationsService) {
         this.advertRep = advertRepository;
         this.petServ = petService;
         this.cityServ = cityService;
         this.userServ = userService;
         this.advMap = advMapper;
-        this.filterMap = filterMapper;
         this.petMap = petMapper;
         this.notificationsService = notificationsService;
     }
@@ -53,15 +47,6 @@ public class AdvertService {
 
     }
 
-
-    public List<AdvertResponseDTO> getByFilter(FilterDTO filterDTO) {
-        ArrayList<Advert> lstAdvert = filterMap.findGoodList(filterDTO);
-        ArrayList<AdvertResponseDTO> lstResponse = new ArrayList<>();
-        for(Advert advert: lstAdvert){
-            lstResponse.add(advMap.AdvertToResponseDTO(advert));
-        }
-        return lstResponse;
-    }
 
     public String createAdvert(AdvertDTO advertDTO) {
         Date today = new Date();
@@ -90,22 +75,22 @@ public class AdvertService {
 
     public AdvertResponseDTO updateAdvert(long id, AdvertDTO advertDTO) {
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
+                .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
         Date today = new Date();
         advert.setUpdateDate(today);
-        if (advertDTO.eventDate() !=null) {
+        if (advertDTO.eventDate() != null) {
             advert.setEventDate(advertDTO.eventDate());
         }
-        if (advertDTO.description() !=null) {
+        if (advertDTO.description() != null) {
             advert.setDescription(advertDTO.description());
         }
-        if (advertDTO.photoUrl() !=null) {
+        if (advertDTO.photoUrl() != null) {
             advert.setPhotoUrl(advertDTO.photoUrl());
         }
-        if (advertDTO.isTakeIn() !=null) {
+        if (advertDTO.isTakeIn() != null) {
             advert.setIsTakeIn(advertDTO.isTakeIn());
         }
-        if (advertDTO.petDTO() !=null) {
+        if (advertDTO.petDTO() != null) {
             petServ.updatePet(advertDTO.petDTO());
         }
 

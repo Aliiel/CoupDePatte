@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class NotificationsService {
@@ -28,25 +26,18 @@ public class NotificationsService {
     }
 
     public void sendNewAdvertNotification(Advert advert) {
-        if (!advert.getIsFound()) { // On ne notifie que si c'est un animal perdu
+        if (Boolean.FALSE.equals(advert.getIsFound())) { // On ne notifie que si c'est un animal perdu
             Long breedId = advert.getPet().getBreed().getId(); // Récupère l'ID de la breed de l'animal perdu
-            List<User> advertUsers = advertRepository.findUsersByMatchingFoundAdverts(advert.getCity().getId(), breedId);
-            List<User> messageUsers = messageRepository.findUsersByMatchingFoundMessages(advert.getCity().getId(), breedId);
-
-            // Fusionner les listes et éviter les doublons
-
-            Set<User> usersToNotify = new HashSet<>(advertUsers);
-            usersToNotify.addAll(messageUsers);
+            List<Advert> adverts = advertRepository.findUsersByMatchingFoundAdverts(advert.getCity().getId(), breedId);
 
             // Envoyer la notification à chaque utilisateur concerné
-
-            for (User user : usersToNotify) {
+            List<User> users = adverts.stream().map(Advert::getUser).toList();
+            for (User user : users) {
                 messagingTemplate.convertAndSendToUser(
-                    user.getId().toString(), "/queue/notifications", advert
+                        user.getId().toString(), "/queue/notifications", advert
 
                 );
             }
         }
     }
-
 }

@@ -1,6 +1,6 @@
 package org.mma.CoupDePatte.Models.DTO;
 
-public record PetResponseDTO (
+public record PetResponseDTO(
         String SpecieName,
         String breedName,
         String genderName,
@@ -10,4 +10,5 @@ public record PetResponseDTO (
         String coatColor,
         Boolean tattoo,
         Boolean identificationChip
-) {}
+) {
+}

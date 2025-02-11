@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -33,7 +30,7 @@ public class Pet {
     @Column(name = "coat_color", nullable = false, length = 30)
     private String coatColor;
 
-    @Column(name ="tattoo")
+    @Column(name = "tattoo")
     private Boolean tattoo;
 
     @Column(name = "identification_chip")

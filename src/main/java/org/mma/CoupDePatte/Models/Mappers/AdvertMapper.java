@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 public class AdvertMapper {
     PetMapper petMap;
 
-    public AdvertMapper(PetMapper petMapper){
-        this.petMap=petMapper;
+    public AdvertMapper(PetMapper petMapper) {
+        this.petMap = petMapper;
     }
 
-    public AdvertResponseDTO AdvertToResponseDTO (Advert advert) {
+    public AdvertResponseDTO AdvertToResponseDTO(Advert advert) {
         return new AdvertResponseDTO(
                 advert.getEventDate(),
                 advert.getDescription(),

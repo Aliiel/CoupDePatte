@@ -70,7 +70,7 @@ public class JwtService {
     }
 
 
-    public String generateToken (User user) {
+    public String generateToken(User user) {
         return generateToken(new HashMap<>(), user);
     }
 
@@ -95,23 +95,6 @@ public class JwtService {
     private boolean isTokenExpired(String token) {
         return extractExpirationTime(token).before(new Date());
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

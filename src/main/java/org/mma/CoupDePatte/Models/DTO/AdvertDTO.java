@@ -12,4 +12,5 @@ public record AdvertDTO(
         Long userId,
         Long cityId,
         PetDTO petDTO
-){}
+) {
+}

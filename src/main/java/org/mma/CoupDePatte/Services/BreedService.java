@@ -9,17 +9,17 @@ import org.springframework.stereotype.Service;
 public class BreedService {
     BreedRepository breedRep;
 
-    public BreedService(BreedRepository breedRepository){
-        this.breedRep=breedRepository;
+    public BreedService(BreedRepository breedRepository) {
+        this.breedRep = breedRepository;
     }
 
-    public Breed getById(long id){
+    public Breed getById(long id) {
         return breedRep.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Race avec ID " + Long.toString(id) + " inconnue"));
     }
 
 
-    public Breed getByName(String name){
+    public Breed getByName(String name) {
         return breedRep.findByName(name)
                 .orElseThrow(() -> new ResourceNotFoundException("Race avec nom " + name + " inconnue"));
     }

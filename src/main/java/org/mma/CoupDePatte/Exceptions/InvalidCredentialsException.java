@@ -2,9 +2,8 @@ package org.mma.CoupDePatte.Exceptions;
 
 public class InvalidCredentialsException extends RuntimeException {
 
-    private final int status;
-
     private static final String MESSAGE = "Les identifiants saisis sont invalides.";
+    private final int status;
 
     public InvalidCredentialsException(int status) {
         super(MESSAGE);

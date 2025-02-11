@@ -2,7 +2,7 @@ package org.mma.CoupDePatte.Models.DTO;
 
 import java.util.Date;
 
-public record AdvertResponseDTO (
+public record AdvertResponseDTO(
         Date eventDate,
         String description,
         String photoUrl,
@@ -13,4 +13,5 @@ public record AdvertResponseDTO (
         PetResponseDTO petRespDTO,
         Date creationDate,
         Date updateDate
-){}
+) {
+}

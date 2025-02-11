@@ -1,18 +1,15 @@
 package org.mma.CoupDePatte.Controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.mma.CoupDePatte.Services.GenderService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/genders")
+@RequiredArgsConstructor
 public class GenderController {
 
-    private final GenderServices genderServices;
-
-    @Autowired
-    public GenderController(GenderServices genderServices) {
-        this.genderServices = genderServices;
-    }
+    private final GenderService genderServices;
 
 }

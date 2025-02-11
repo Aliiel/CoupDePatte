@@ -41,7 +41,6 @@ public class UserService {
     private final RoleRepository roleRepository;
 
 
-
     public RegistrationResponse createUser(UserDTO userDTO) {
 
         Optional<User> existingUser = userRepository.findByEmail(userDTO.getEmail());
@@ -128,13 +127,12 @@ public class UserService {
 
 
     private boolean isPasswordStrong(String password) {
-
         String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$";
-
         return password.matches(regex);
 
-}
-      public User getById(Long id) {
+    }
+
+    public User getById(Long id) {
         return userRepository.getUserById(id);
     }
 }
