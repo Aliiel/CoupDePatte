@@ -9,9 +9,9 @@ public record FilterDTO(
         //Gestion des filtres choisis par l'utilisateur pour lui envoyer les annonces correspondant à son filtre
         @NotNull(message = "Merci de préciser le type d'annonces cherché")
         boolean isTrouve,
-        @NotBlank(message = "Précisez à proximité de quelle ville")
-        String town,
-        @NotNull(message = "Précisez à partir de quelle date faire la recherche")
+        @NotBlank(message = "Précisez à proximité de quelle ville et précisez le code postal")
+        CityDTO cityDTO,
+        @NotNull (message = "Précisez à partir de quelle date faire la recherche")
         Date eventDate,
         @NotBlank(message = "Sélectionnez une espèce d'animal")
         String specie,
