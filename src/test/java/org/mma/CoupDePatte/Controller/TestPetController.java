@@ -59,22 +59,22 @@ class TestPetController {
         mockMvc = MockMvcBuilders.standaloneSetup(petCtrl).build();
 
         //initialisation des objets utiles pour les tests
-        chat= new Specie(1,"chat");
-        chien = new Specie(2,"chien");
-        femelle = new Gender(1, "femelle");
-        male = new Gender(2, "mâle");
-        brchien = new Breed(3, "teckel",chien);
-        brchat = new Breed(3, "main coon",chat);
-        pet1 = new Pet(1,"violette", "tres calme", "jaune", "marron et blanc",
+        chat= new Specie(1L,"chat");
+        chien = new Specie(2L,"chien");
+        femelle = new Gender(1L, "femelle");
+        male = new Gender(2L, "mâle");
+        brchien = new Breed(3L, "teckel",chien);
+        brchat = new Breed(3L, "main coon",chat);
+        pet1 = new Pet(1L,"violette", "tres calme", "jaune", "marron et blanc",
                 false,true,femelle, brchien);
-        pet2 = new Pet(2,"mimi", "caline", "vert", "écaille",
+        pet2 = new Pet(2L,"mimi", "caline", "vert", "écaille",
                 false,true,femelle, brchat);
-        pet3 = new Pet(3,"sarrazin", "sportif et timide", "marron", "noir",
+        pet3 = new Pet(3L,"sarrazin", "sportif et timide", "marron", "noir",
                 false,true,male, brchien);
         lstPetOk.add(pet1);
         lstPetChien.add(pet1);
         lstPetChien.add(pet3);
-        petId = 1;
+        petId = 1L;
         petRDTO=new PetResponseDTO("chien", "teckel", "femelle", "violette",
                 "tres calme", "jaune", "marron et blanc", false,true);
         filter1 = new FilterDTO(true,"Paris",new Date(),"chien","teckel",

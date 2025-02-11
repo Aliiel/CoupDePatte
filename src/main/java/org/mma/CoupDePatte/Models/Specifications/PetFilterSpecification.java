@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PetFilterSpecification implements Specification<Pet> {
-    //pas utilisé dans le programme. Permet de rendre encore plus dynamique la spécification
-    // utilise specif SearchCriteria et SearchOperation qui ne sont donc pas utilisées dans le programme non plus
+    // utilise specif SearchCriteria et SearchOperation
 
     private List <SearchCriteria> lstCriteres;
 

@@ -47,6 +47,17 @@ public class AdvertController {
 
     }
 
+    @PatchMapping("/update/admin/active/{id}")
+    public void updAdvActivation(@PathVariable long id){
+        advServ.updAdvActive(id);
+
+    }
+
+    @PatchMapping("/update/active/{id}")
+    public void updAdvUnActivation(@PathVariable long id){
+        advServ.updAdvUnActive(id);
+
+    }
 
     @PostMapping("/message/{id}")
     public ResponseEntity<String> addMsg(@PathVariable long id, @RequestBody MsgDTO msgDTO){
@@ -54,9 +65,15 @@ public class AdvertController {
 
     }
 
-    @PostMapping("/answer/new/{id}/{userId}")
-    public ResponseEntity<String>  addAnswer(@PathVariable long id,long userId, @RequestBody MsgDTO msgDTO){
-        return ResponseEntity.status(HttpStatus.OK).body(advServ.createAnswer(id,userId,msgDTO));
+    @PostMapping("/answer/new/{id}/{email}")
+    public ResponseEntity<String>  addAnswer(@PathVariable long id,@PathVariable String email, @RequestBody MsgDTO msgDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(advServ.createAnswer(id,email,msgDTO));
+
+    }
+
+    @PatchMapping("/answer/update/{id}")
+    public ResponseEntity<String>  updateAnswer(@PathVariable long id, @RequestBody MsgDTO msgDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(advServ.updAnswer(id,msgDTO));
 
     }
 
@@ -66,16 +83,5 @@ public class AdvertController {
 
     }
 
-    @PatchMapping("/update/admin/{id}")
-    public void updAdvActivation(@PathVariable long id){
-        advServ.updAdvActive(id);
-
-    }
-
-    @PatchMapping("/update/{id}")
-    public void updAdvUnActivation(@PathVariable long id){
-        advServ.updAdvUnActive(id);
-
-    }
 
 }

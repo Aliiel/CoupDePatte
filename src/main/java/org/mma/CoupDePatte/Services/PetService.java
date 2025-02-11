@@ -7,6 +7,9 @@ import org.mma.CoupDePatte.Models.Repositories.*;
 import org.mma.CoupDePatte.Models.Entities.*;
 import static org.mma.CoupDePatte.Models.Specifications.PetSpecification.*;
 
+import org.mma.CoupDePatte.Models.Specifications.PetFilterSpecification;
+import org.mma.CoupDePatte.Models.Specifications.SearchCriteria;
+import org.mma.CoupDePatte.Models.Specifications.SearchOperation;
 import org.springframework.stereotype.Service;
 import static org.springframework.data.jpa.domain.Specification.*;
 
@@ -192,190 +195,37 @@ public class PetService {
     */
 
     public ArrayList<Pet> getPetByFilterSpec(FilterDTO filterDTO){
-        //Utilisation des requêtes dynamiques (cf Specifications et MetaModels packages)
+        //Récupère la liste des animaux correspondant aux critères transmis dans le filtre
+
         ArrayList<Pet> lstPet;
         ArrayList<Breed> lstBreed;
+        //Utilisation des requêtes dynamiques (cf Specifications et MetaModels packages)
+        PetFilterSpecification petFilter= new PetFilterSpecification();
 
         Specie specie = specieServ.getByName(filterDTO.specie());
         lstBreed = breedServ.getBySpecie(specie);
-        //Récupère la liste des animaux correspondant aux critères transmis dans le filtre
-        if (filterDTO.breed()!=null){
+        petFilter.add(new SearchCriteria("breed", SearchOperation.IN,lstBreed));
+        if (filterDTO.breed()!=null) {
             Breed breed = breedServ.getByName(filterDTO.breed());
-            if(filterDTO.gender()!=null){
-                Gender gender = genderServ.getByName(filterDTO.gender());
-                if(filterDTO.eyes()!=null){
-                    if(filterDTO.coat()!=null){
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed).and(genderEqual(gender)
-                                    .and(eyesEqual(filterDTO.eyes()).and(coatEqual(filterDTO.coat()).and(tattooTrue()
-                                    )))))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed).and(genderEqual(gender)
-                                    .and(eyesEqual(filterDTO.eyes()).and(coatEqual(filterDTO.coat()).and(tattooFalse()
-                                    )))))));
-                        }
-                    }else{
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed).and(genderEqual(gender)
-                                    .and(eyesEqual(filterDTO.eyes()).and(tattooTrue()
-                                    ))))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed).and(genderEqual(gender)
-                                    .and(eyesEqual(filterDTO.eyes()).and(tattooFalse()
-                                    ))))));
-                        }
-                    }
-                }else{
-                    if(filterDTO.coat()!=null){
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed).and(genderEqual(gender)
-                                    .and(coatEqual(filterDTO.coat()).and(tattooTrue()
-                                    ))))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed).and(genderEqual(gender)
-                                    .and(coatEqual(filterDTO.coat()).and(tattooFalse()
-                                    ))))));
-                        }
-                    }else {
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed).and(genderEqual(gender)
-                                    .and(tattooTrue()
-                                    )))));
-
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed).and(genderEqual(gender)
-                                    .and(tattooFalse()
-                                    )))));
-                        }
-                    }
-                }
-            }else{
-                if(filterDTO.eyes()!=null){
-                    if(filterDTO.coat()!=null){
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed)
-                                    .and(eyesEqual(filterDTO.eyes()).and(coatEqual(filterDTO.coat()).and(tattooTrue()
-                                    ))))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed)
-                                    .and(eyesEqual(filterDTO.eyes()).and(coatEqual(filterDTO.coat()).and(tattooFalse()
-                                    ))))));
-                        }
-                    }else{
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed)
-                                    .and(eyesEqual(filterDTO.eyes()).and(tattooTrue()
-                                    )))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed)
-                                    .and(eyesEqual(filterDTO.eyes()).and(tattooFalse()
-                                    )))));
-                        }
-                    }
-                }else{
-                    if(filterDTO.coat()!=null){
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed)
-                                    .and(coatEqual(filterDTO.coat()).and(tattooTrue()
-                                    )))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed)
-                                    .and(coatEqual(filterDTO.coat()).and(tattooFalse()
-                                    )))));
-                        }
-                    }else {
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed).and(tattooTrue()))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(breedEqual(breed).and(tattooFalse()))));
-                        }
-                    }
-                }
-            }
-        }else{
-            if(filterDTO.gender()!=null){
-                Gender gender = genderServ.getByName(filterDTO.gender());
-                if(filterDTO.eyes()!=null){
-                    if(filterDTO.coat()!=null){
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(genderEqual(gender)
-                                    .and(eyesEqual(filterDTO.eyes()).and(coatEqual(filterDTO.coat()).and(tattooTrue()
-                                    ))))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(genderEqual(gender)
-                                    .and(eyesEqual(filterDTO.eyes()).and(coatEqual(filterDTO.coat()).and(tattooFalse()
-                                    ))))));
-                        }
-                    }else{
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(genderEqual(gender)
-                                    .and(eyesEqual(filterDTO.eyes()).and(tattooTrue()
-                                    )))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(genderEqual(gender)
-                                    .and(eyesEqual(filterDTO.eyes()).and(tattooFalse()
-                                    )))));
-                        }
-                    }
-                }else{
-                    if(filterDTO.coat()!=null){
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(genderEqual(gender)
-                                    .and(coatEqual(filterDTO.coat()).and(tattooTrue()
-                                    )))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(genderEqual(gender)
-                                    .and(coatEqual(filterDTO.coat()).and(tattooFalse()
-                                    )))));
-                        }
-                    }else {
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(genderEqual(gender).and(tattooTrue()))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(genderEqual(gender).and(tattooTrue()))));
-                        }
-                    }
-                }
-            }else{
-                if(filterDTO.eyes()!=null){
-                    if(filterDTO.coat()!=null){
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed)
-                                    .and(eyesEqual(filterDTO.eyes()).and(coatEqual(filterDTO.coat()).and(tattooTrue()
-                                    )))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed)
-                                    .and(eyesEqual(filterDTO.eyes()).and(coatEqual(filterDTO.coat()).and(tattooFalse()
-                                    )))));
-                        }
-                    }else{
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(eyesEqual(filterDTO.eyes()).and(tattooTrue()
-                                    ))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(eyesEqual(filterDTO.eyes()).and(tattooFalse()
-                                    ))));
-                        }
-                    }
-                }else{
-                    if(filterDTO.coat()!=null){
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(coatEqual(filterDTO.coat()).and(tattooTrue()
-                                    ))));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(coatEqual(filterDTO.coat()).and(tattooFalse()
-                                    ))));
-                        }
-                    }else {
-                        if(filterDTO.tattoo()){
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(tattooTrue())));
-                        }else {
-                            lstPet = petRep.findAll(where(breedIn(lstBreed).and(tattooFalse())));
-                        }
-                    }
-                }
-            }
+            petFilter.add(new SearchCriteria("breed", SearchOperation.EQUAL, breed));
         }
+        if(filterDTO.gender()!=null) {
+            Gender gender = genderServ.getByName(filterDTO.gender());
+            petFilter.add(new SearchCriteria("gender", SearchOperation.EQUAL, gender));
+        }
+        if(filterDTO.eyes()!=null) {
+            petFilter.add(new SearchCriteria("eyesColor", SearchOperation.EQUAL, filterDTO.eyes()));
+        }
+        if(filterDTO.coat()!=null) {
+            petFilter.add(new SearchCriteria("coatColor", SearchOperation.EQUAL, filterDTO.coat()));
+        }
+        if(filterDTO.tattoo()){
+            petFilter.add(new SearchCriteria("tattoo", SearchOperation.EQUAL,true));
+        }else {
+            petFilter.add(new SearchCriteria("tattoo", SearchOperation.EQUAL, false));
+        }
+        lstPet = petRep.findAll(petFilter);
+
         return lstPet;
     }
 
@@ -414,12 +264,10 @@ public class PetService {
         if (petDTO.coatColor()!=null) {
             pet.setCoatColor(petDTO.coatColor());
         }
-        if (petDTO.tattoo()) {
-            pet.setTattoo(petDTO.tattoo());
-        }
-        if (petDTO.identificationChip()) {
-            pet.setIdentificationChip(petDTO.identificationChip());
-        }
+        //boolean donc toujours une valeur (false par défaut)
+        pet.setTattoo(petDTO.tattoo());
+        pet.setIdentificationChip(petDTO.identificationChip());
+
         if (petDTO.genderId()!=0) {
             pet.setGender(genderServ.getById(petDTO.genderId()));
         }

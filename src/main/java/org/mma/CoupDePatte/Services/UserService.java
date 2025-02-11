@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.mma.CoupDePatte.Exceptions.InvalidCredentialsException;
 import org.mma.CoupDePatte.Exceptions.InvalidPasswordException;
+import org.mma.CoupDePatte.Exceptions.ResourceNotFoundException;
 import org.mma.CoupDePatte.Exceptions.UserAlreadyExistsException;
 import org.mma.CoupDePatte.Models.DTO.*;
 import org.mma.CoupDePatte.Models.Entities.City;
@@ -106,6 +107,11 @@ public class UserService {
                 .toList();
     }
 
+    public User getByEmail(String email){
+         User user = userRepository.findByEmail(email)
+                        .orElseThrow(() -> new ResourceNotFoundException("Utilisateur avec email " + email + " inconnu"));
+                return user;
+    }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 

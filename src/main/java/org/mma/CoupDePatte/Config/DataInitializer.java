@@ -1,10 +1,12 @@
 package org.mma.CoupDePatte.Config;
 
-import org.mma.CoupDePatte.Models.Entities.Role;
-import org.mma.CoupDePatte.Models.Repositories.RoleRepository;
+import org.mma.CoupDePatte.Models.Entities.*;
+import org.mma.CoupDePatte.Models.Repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class DataInitializer {
@@ -20,4 +22,5 @@ public class DataInitializer {
             }
         };
     }
+
 }

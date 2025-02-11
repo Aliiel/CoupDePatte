@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 @Component
 public class PetSpecification {
+    //pas utilisé dans le programme.
     public static Specification<Pet> eyesLike(String eyes){
         return (root,criteriaQuery,criteriaBuilder)->
                 criteriaBuilder.like(root.get(PetMetaModel.eyesColor),"%"+eyes+"%");

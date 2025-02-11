@@ -1,10 +1,14 @@
 package org.mma.CoupDePatte.Models.Mappers;
 
+import org.mapstruct.Mapper;
 import org.mma.CoupDePatte.Models.DTO.PetDTO;
 import org.mma.CoupDePatte.Models.DTO.PetResponseDTO;
 import org.mma.CoupDePatte.Models.Entities.Pet;
+import org.mma.CoupDePatte.Services.BreedService;
+import org.mma.CoupDePatte.Services.GenderService;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class PetMapper {
     GenderService genderServ;
     BreedService breedServ;
@@ -52,8 +56,8 @@ public class PetMapper {
         pet.setCoatColor(petDTO.coatColor());
         pet.setTattoo(petDTO.tattoo());
         pet.setIdentificationChip(petDTO.identificationChip());
-        pet.setBreed(breedServ.getById(petDTO.breedId()));
         pet.setGender(genderServ.getById(petDTO.genderId()));
+        pet.setBreed(breedServ.getById(petDTO.breedId()));
 
         return pet;
     }

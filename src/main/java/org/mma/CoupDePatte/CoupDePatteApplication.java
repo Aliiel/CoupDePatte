@@ -11,15 +11,14 @@ import java.util.List;
 @SpringBootApplication
 public class CoupDePatteApplication implements CommandLineRunner {
 	GenderRepository genderRep;
-	RoleRepository roleRep;
 	SpecieRepository specieRep;
 	BreedRepository breedRep;
-	public CoupDePatteApplication(GenderRepository genderRepository, RoleRepository roleRepository,
-					   SpecieRepository specieRepository, BreedRepository breedRepository){
+
+	public CoupDePatteApplication(GenderRepository genderRepository,
+								  SpecieRepository specieRepository, BreedRepository breedRepository){
 		this.genderRep = genderRepository;
 		this.specieRep = specieRepository;
 		this.breedRep = breedRepository;
-		this.roleRep = roleRepository;
 	}
 
 	public static void main(String[] args) {
@@ -38,11 +37,6 @@ public class CoupDePatteApplication implements CommandLineRunner {
 		Gender gender1 = new Gender(null,"femelle");
 		Gender gender2 = new Gender(null,"mâle");
 		genderRep.saveAll(List.of(gender1,gender2));
-
-		// Crée les enregistrements de la table role
-		Role role1 = new Role(null,"admin");
-		Role role2 = new Role(null,"user");
-		roleRep.saveAll(List.of(role1,role2));
 
 		// Crée les enregistrements de la table specie
 		Specie specie1 = new Specie(null,"chat");
@@ -74,10 +68,12 @@ public class CoupDePatteApplication implements CommandLineRunner {
 		Breed breed19 = new Breed(null,"dugue allemand",spChien);
 		Breed breed20 = new Breed(null,"cane corso",spChien);
 		Breed breed21 = new Breed(null,"husky",spChien);
+		Breed breed11 = new Breed(null,"teckel",spChien);
 
-		breedRep.saveAll(List.of(breed1,breed2,breed3,breed4,breed5,breed6,breed7,breed8,breed9,breed10));
-		breedRep.saveAll(List.of(breed12,breed13,breed14,breed15,breed16,breed18,breed19,breed20,breed2,breed21));
+		breedRep.saveAll(List.of(breed1,breed2,breed3,breed4,breed5,breed6,breed7,breed8,breed9,breed10,breed11));
+		breedRep.saveAll(List.of(breed12,breed13,breed14,breed15,breed16,breed17,breed18,breed19,breed20,breed2,breed21));
 		System.out.println("✅ Données initiales insérées avec succès !");
 	}
+
 
 }

@@ -21,8 +21,8 @@ public class AnswerService {
     }
 
     public ArrayList<Answer> getByAdvert(Advert advert){
+        return answerRep.findByAdvertOrderByDateDesc(advert);
 
-        return answerRep.findByAnswerOrderByDateDesc(advert);
     }
 
     public void createAnswer(MsgDTO msgDTO, Advert advert, User user,String msgDefault) {
@@ -49,9 +49,9 @@ public class AnswerService {
         if (msgDTO.content() !=null) {
             answer.setContent(msgDTO.content());
         }
-        if (msgDTO.isTakeIn() !=null) {
-            answer.setIsTakeIn(msgDTO.isTakeIn());
-        }
+
+        answer.setIsTakeIn(msgDTO.isTakeIn());
+
         if (msgDTO.date() !=null) {
             answer.setDate(msgDTO.date());
         }

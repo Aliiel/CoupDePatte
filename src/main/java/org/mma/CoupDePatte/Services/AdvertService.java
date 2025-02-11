@@ -1,5 +1,6 @@
 package org.mma.CoupDePatte.Services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.mma.CoupDePatte.Comparators.OrderByDate;
 import org.mma.CoupDePatte.Exceptions.BusinessLogicException;
 import org.mma.CoupDePatte.Exceptions.ResourceNotFoundException;
@@ -16,7 +17,6 @@ import org.mma.CoupDePatte.Models.Repositories.MessageRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
 @Service
@@ -52,7 +52,7 @@ public class AdvertService {
 
     public ArrayList<Advert> findGoodList(FilterDTO filterDTO){
         //Partie du filtre obligatoire donc avec une information
-        City city=cityServ.getByName(filterDTO.town());
+        City city=cityServ.getCity(filterDTO.cityDTO());
         Date eventDate = filterDTO.eventDate();
         ArrayList<Advert> lstAdvertOK ;//Déclaration sans new ArrayList pour la charger en bloc dans if
         //et l'utiliser en dehors du if (portabilité)
@@ -88,8 +88,8 @@ public class AdvertService {
 
     public ArrayList<AdvertResponseDTO> getByFilter(FilterDTO filterDTO) {
         ArrayList<Advert> lstAdvert= findGoodList(filterDTO);
-        if(lstAdvert.size()==0){
-            new ResourceNotFoundException("Aucune annonce ne correspond à votre sélection");
+        if(lstAdvert.isEmpty()){
+            throw new ResourceNotFoundException("Aucune annonce ne correspond à votre sélection");
         }
 
         ArrayList<AdvertResponseDTO> lstResponse = new ArrayList<>();
@@ -111,8 +111,8 @@ public class AdvertService {
         advert.setIsActive(true);
         advert.setIsTakeIn(advertDTO.isTakeIn());
         advert.setIsFound(advertDTO.isFound());
-        advert.setUser(userServ.getById(advertDTO.userId()));
-        advert.setCity(cityServ.getById(advertDTO.cityId()));
+        advert.setUser(userServ.getByEmail(advertDTO.email()));
+        advert.setCity(cityServ.getByDTO(advertDTO.cityDTO()));
         advert.setPet(petServ.createPet(advertDTO.petDTO()));
         advertRep.save(advert);
         Long advertId = advert.getId();
@@ -170,12 +170,15 @@ public class AdvertService {
         if(msgDTO.date()== null){
             new BusinessLogicException("Merci de préciser la date de l'événement");
         }
-        if(msgDTO.isTakeIn()== null){
-            new BusinessLogicException("Merci de préciser si l'animal est mis en sécurité");
-        }
 
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
+        if(!advert.getIsFound()) {
+            if (msgDTO.isTakeIn() == null) {
+                throw new BusinessLogicException("Merci de préciser si l'animal est mis en sécurité");
+            }
+        }
+
         Message message=new Message();
         if (advert.getIsFound()) {
             //annonce Trouvé
@@ -208,22 +211,20 @@ public class AdvertService {
         return "Votre message est bien envoyé";
     }
 
-    public String createAnswer(long id, long usrId, MsgDTO msgDTO){
-        if((msgDTO.email()== null) && (msgDTO.phone()==null)){
-            new BusinessLogicException("Merci de saisir votre adresse email et/ou votre numéro de téléphone pour"+
-                    " permettre à l'annonceur de vous contacter");
-        }
+    public String createAnswer(long id, String email, MsgDTO msgDTO){
         if(msgDTO.date()== null){
-            new BusinessLogicException("Merci de préciser la date de l'événement");
-        }
-        if(msgDTO.isTakeIn()== null){
-            new BusinessLogicException("Merci de préciser si l'animal est mis en sécurité");
+            throw new BusinessLogicException("Merci de préciser la date de l'événement");
         }
 
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
-        User user = userServ.findById(usrId)
-                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur avec ID " + id + " inconnu"));
+        if(!advert.getIsFound()) {
+            if (msgDTO.isTakeIn() == null) {
+                throw new BusinessLogicException("Merci de préciser si l'animal est mis en sécurité");
+            }
+        }
+        User user = userServ.getByEmail(email);
+
         if (advert.getIsFound()) {
             //annonce Trouvé
             answerServ.createAnswer(msgDTO,advert,user,msgPerduDefault);
@@ -231,6 +232,11 @@ public class AdvertService {
             answerServ.createAnswer(msgDTO,advert,user,msgTrouveDefault);
         }
         return "Votre message est bien envoyé";
+
+    }
+
+    public String updAnswer(long id, MsgDTO msgDTO){
+        return answerServ.updateAnswer(id,msgDTO);
 
     }
 
@@ -245,7 +251,7 @@ public class AdvertService {
         for(Message message:lstMsg){
             lstMsgDTO.add(msgMap.msgToDTO(message));
         }
-        Collections.sort(lstMsgDTO, new OrderByDate());
+        lstMsgDTO.sort(new OrderByDate());
         return lstMsgDTO;
     }
 }

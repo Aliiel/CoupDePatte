@@ -5,7 +5,9 @@ import org.mma.CoupDePatte.Models.DTO.PetDTO;
 import org.mma.CoupDePatte.Models.Entities.Answer;
 import org.mma.CoupDePatte.Models.Entities.Message;
 import org.mma.CoupDePatte.Models.Entities.Pet;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MsgMapper {
     public MsgDTO msgToDTO (Message message){
         return new MsgDTO(

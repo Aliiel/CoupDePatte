@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
     Optional<Answer> findById(Long id);
-    ArrayList<Answer> findByAnswerOrderByDateDesc(Advert advert);
+    ArrayList<Answer> findByAdvertOrderByDateDesc(Advert advert);
 }
