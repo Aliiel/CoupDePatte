@@ -2,14 +2,16 @@ spring:
   application:
     name: CoupDePatte
   datasource:
-    url: jdbc:postgresql://localhost:5432/dbPet
+    url: jdbc:postgresql://localhost:5432/dbpet
     username: postgres
     password: password
     driver-class-name: org.postgresql.Driver
   jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
-      dialect: org.hibernate.dialect.PostgreSQLDialect
-      format_sql: true
+      hibernate:
+        format_sql: true
     show-sql: true
     hibernate:
       ddl-auto: create-drop
