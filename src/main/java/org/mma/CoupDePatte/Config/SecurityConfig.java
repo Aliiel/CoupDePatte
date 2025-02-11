@@ -16,16 +16,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private static final String[] AUTH_WHITELIST = {
-            "/auth/authenticate",
-            "/auth/register",
-            "/users"
+    private static final String [] AUTH_WHITELIST = {
+            "/auth/*"
     };
 
     private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
-/*
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -33,10 +31,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers(AUTH_WHITELIST)
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated())
+                                .requestMatchers(AUTH_WHITELIST).permitAll()
+                                .anyRequest().authenticated())
                 .sessionManagement(
                         sessionManagement -> sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -44,22 +40,6 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
+                return http.build();
     }
-
- */
-@Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-    http
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(
-                    authorize -> authorize
-                            .anyRequest().permitAll())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
-    return http.build();
-}
 }
