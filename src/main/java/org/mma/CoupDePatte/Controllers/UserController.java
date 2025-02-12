@@ -16,16 +16,23 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<RegistrationResponse> createUser(@RequestBody UserDTO userDTO) {
 
-        RegistrationResponse registrationResponse = userService.createUser(userDTO);
-        return ResponseEntity.ok(registrationResponse);
-    }
-
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> allUsers = userService.getAllUsers();
         return ResponseEntity.ok(allUsers);
+    }
+
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        UserDTO updatedUser = userService.updateUser(id, userDTO);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
     }
 }

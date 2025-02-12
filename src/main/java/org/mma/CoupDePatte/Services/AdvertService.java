@@ -1,6 +1,5 @@
 package org.mma.CoupDePatte.Services;
 
-import lombok.extern.slf4j.Slf4j;
 import org.mma.CoupDePatte.Comparators.OrderByDate;
 import org.mma.CoupDePatte.Exceptions.BusinessLogicException;
 import org.mma.CoupDePatte.Exceptions.ResourceNotFoundException;
@@ -32,15 +31,14 @@ public class AdvertService {
     PetMapper petMap;
     String msgTrouveDefault;
     String msgPerduDefault;
-    NotificationsService notificationsServ;
+    NotificationsService notificationsService;
 
     public AdvertService(AdvertRepository advertRepository, PetService petService,
-                         CityService cityService, UserService userService, AdvertMapper advMapper,
-                         PetMapper petMapper, MsgMapper msgMapper,
-                         MessageRepository msgRepository, AnswerService answerService, NotificationsService notificationsServ ) {
+        CityService cityService, UserService userService, AdvertMapper advMapper, PetMapper petMapper, MsgMapper msgMapper,
+        MessageRepository msgRepository, AnswerService answerService, NotificationsService notificationsService ) {
         this.advertRep= advertRepository;
         this.msgRep= msgRepository;
-        this.notificationsServ= notificationsServ;
+        this.notificationsService = notificationsService;
         this.petServ = petService;
         this.cityServ = cityService;
         this.userServ=userService;
@@ -117,8 +115,18 @@ public class AdvertService {
         advert.setCity(cityServ.getByDTO(advertDTO.cityDTO()));
         advert.setPet(petServ.createPet(advertDTO.petDTO()));
         advertRep.save(advert);
+
+        // Notification : si c'est un animal perdu, on notifie ceux qui ont signalé un animal trouvé
+        if (!advert.getIsFound()) {
+            notificationsService.sendNewAdvertNotification(advert);
+        }
+        // Notification : si c'est un animal trouvé, on notifie ceux qui ont signalé un animal perdu
+        else {
+            notificationsService.sendNewFoundAdvertNotification(advert);
+        }
+
         Long advertId = advert.getId();
-        notificationsServ.sendNewAdvertNotification(advert);
+
         return "Votre annonce a bien été créée sous la référence "+Long.toString(advertId);
     }
 
@@ -210,7 +218,7 @@ public class AdvertService {
         message.setDate(msgDTO.date());
         message.setAdvert(advert);
         msgRep.save(message);
-        notificationsServ.sendNewMsgNotification(msgDTO,advert);
+        notificationsService.sendNewMsgNotification(msgDTO,advert);
         return "Votre message est bien envoyé";
     }
 
@@ -234,7 +242,7 @@ public class AdvertService {
         }else {
             answerServ.createAnswer(msgDTO,advert,user,msgTrouveDefault);
         }
-        notificationsServ.sendNewAnswerNotification(msgDTO,user);
+        notificationsService.sendNewAnswerNotification(msgDTO,user);
         return "Votre message est bien envoyé";
 
     }

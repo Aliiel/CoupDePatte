@@ -20,17 +20,12 @@ public class AuthController {
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
 
-        System.out.println("Authentication request: " + request);
-        System.out.println("Username : " + request.username());
-
         return ResponseEntity.ok(userService.authenticate(request));
     }
 
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegistrationRequest request) {
-        System.out.println("Registration request: " + request);
-        System.out.println("Username : " + request.username());
 
         return ResponseEntity.ok(userService.registerUser(request));
     }

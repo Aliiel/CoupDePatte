@@ -1,12 +1,9 @@
 package org.mma.CoupDePatte.Services;
 
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.mma.CoupDePatte.Exceptions.InvalidCredentialsException;
-import org.mma.CoupDePatte.Exceptions.InvalidPasswordException;
-import org.mma.CoupDePatte.Exceptions.ResourceNotFoundException;
-import org.mma.CoupDePatte.Exceptions.UserAlreadyExistsException;
+import lombok.extern.slf4j.Slf4j;
+import org.mma.CoupDePatte.Exceptions.*;
 import org.mma.CoupDePatte.Models.DTO.*;
 import org.mma.CoupDePatte.Models.Entities.City;
 import org.mma.CoupDePatte.Models.Entities.Role;
@@ -27,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -42,40 +40,7 @@ public class UserService {
     private final RoleRepository roleRepository;
 
 
-    public RegistrationResponse createUser(UserDTO userDTO) {
-
-        Optional<User> existingUser = userRepository.findByEmail(userDTO.getEmail());
-        if (existingUser.isPresent()) {
-            throw new UserAlreadyExistsException(HttpStatus.CONFLICT.value());
-        }
-
-        if (!isPasswordStrong(userDTO.getPassword())) {
-            throw new InvalidPasswordException(HttpStatus.BAD_REQUEST.value());
-        }
-
-        CityDTO cityDTO = userDTO.getCity();
-        System.out.println("city recup de la saisie : " + cityDTO.getName() + " - " + cityDTO.getZipCode());
-
-        Optional<City> existingCity = cityRepository.findCity(cityDTO.getName(), cityDTO.getZipCode());
-
-        City city = existingCity.orElseGet(() -> cityRepository.save(cityMapper.toEntity(cityDTO)));
-
-        User user = userMapper.toEntity(userDTO);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        Optional<Role> role = roleRepository.findByName("USER");
-        role.ifPresent(user::setRole);
-
-        user.setCity(city);
-
-        userRepository.save(user);
-
-        final String token = jwtService.generateToken(user);
-
-        return new RegistrationResponse(token, userDTO.getUsername(), userDTO.getEmail(), userDTO.getRole().getName());
-    }
-
-
+    // méthode pour créer un utilisateur à partir de username, password et email
     public RegistrationResponse registerUser(RegistrationRequest registrationRequest) {
 
         Optional<User> existingUser = userRepository.findByEmail(registrationRequest.email());
@@ -100,6 +65,35 @@ public class UserService {
     }
 
 
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+
+        Optional<User> existingUser = userRepository.findById(id);
+
+        if (existingUser.isPresent()) {
+
+            CityDTO cityDTO = userDTO.getCity();
+            log.info("city recup de la saisie : " + cityDTO.getName() + " - " + cityDTO.getZipCode());
+
+            Optional<City> existingCity = cityRepository.findCity(cityDTO.getName(), cityDTO.getZipCode());
+
+            City city = existingCity.orElseGet(() -> cityRepository.save(cityMapper.toEntity(cityDTO)));
+
+            existingUser.get().setCity(city);
+            existingUser.get().setLastName(userDTO.getLastName());
+
+
+            User userUpdated = userRepository.save(existingUser.get());
+
+            return userMapper.toUserDTO(userUpdated);
+
+        } else {
+
+            throw new UserNotFoundException(HttpStatus.NOT_FOUND.value());
+
+        }
+    }
+
+
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll()
                 .stream()
@@ -107,11 +101,13 @@ public class UserService {
                 .toList();
     }
 
+
     public User getByEmail(String email){
          User user = userRepository.findByEmail(email)
                         .orElseThrow(() -> new ResourceNotFoundException("Utilisateur avec email " + email + " inconnu"));
                 return user;
     }
+
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
@@ -132,11 +128,23 @@ public class UserService {
     }
 
 
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException(HttpStatus.NOT_FOUND.value());
+        }
+        userRepository.deleteById(id);
+    }
+
+
+    // méthode de vérification de force du mdp
     private boolean isPasswordStrong(String password) {
+
         String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$";
+
         return password.matches(regex);
 
     }
+
 
     public User getById(Long id) {
         return userRepository.getUserById(id);
