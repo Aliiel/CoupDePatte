@@ -2,21 +2,22 @@ package org.mma.CoupDePatte.Controllers;
 
 import org.mma.CoupDePatte.Models.DTO.AdvertDTO;
 import org.mma.CoupDePatte.Models.DTO.AdvertResponseDTO;
-import org.mma.CoupDePatte.Models.DTO.FilterDTO;
 import org.mma.CoupDePatte.Models.DTO.MsgDTO;
 import org.mma.CoupDePatte.Services.AdvertService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/adverts")
 public class AdvertController {
+
     AdvertService advServ;
 
+    @Autowired
     public AdvertController(AdvertService advServices) {
         this.advServ = advServices;
     }
