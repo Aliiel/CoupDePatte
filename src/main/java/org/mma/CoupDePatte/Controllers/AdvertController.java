@@ -1,5 +1,6 @@
 package org.mma.CoupDePatte.Controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.mma.CoupDePatte.Models.DTO.AdvertDTO;
 import org.mma.CoupDePatte.Models.DTO.AdvertResponseDTO;
 import org.mma.CoupDePatte.Models.DTO.FilterDTO;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/adverts")
 public class AdvertController {
@@ -30,6 +32,7 @@ public class AdvertController {
 
     @PostMapping("/new")
     public ResponseEntity<String> newAdvert(@RequestBody AdvertDTO advertDTO) {
+        log.info("Requête reçue - advert : " + advertDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(advServ.createAdvert(advertDTO));
 
     }
@@ -75,6 +78,4 @@ public class AdvertController {
         return ResponseEntity.status(HttpStatus.OK).body(advServ.searchAnswer(id));
 
     }
-
-
 }

@@ -65,32 +65,23 @@ public class UserService {
     }
 
 
-    public UserDTO updateUser(Long id, UserDTO userDTO) {
+    public Optional<UserDTO> updateUser(Long id, UserDTO userDTO) {
 
-        Optional<User> existingUser = userRepository.findById(id);
-
-        if (existingUser.isPresent()) {
+        return userRepository.findById(id).map(existingUser -> {
 
             CityDTO cityDTO = userDTO.getCity();
-            log.info("city recup de la saisie : " + cityDTO.getName() + " - " + cityDTO.getZipCode());
+            log.info("City récupérée de la saisie : " + cityDTO.getName() + " - " + cityDTO.getZipCode());
 
-            Optional<City> existingCity = cityRepository.findCity(cityDTO.getName(), cityDTO.getZipCode());
+            City city = cityRepository.findCity(cityDTO.getName(), cityDTO.getZipCode())
+                    .orElseGet(() -> cityRepository.save(cityMapper.toEntity(cityDTO)));
 
-            City city = existingCity.orElseGet(() -> cityRepository.save(cityMapper.toEntity(cityDTO)));
+            userMapper.partialUpdate(userDTO, existingUser);
+            existingUser.setCity(city);
 
-            existingUser.get().setCity(city);
-            existingUser.get().setLastName(userDTO.getLastName());
-
-
-            User userUpdated = userRepository.save(existingUser.get());
-
+            User userUpdated = userRepository.save(existingUser);
             return userMapper.toUserDTO(userUpdated);
 
-        } else {
-
-            throw new UserNotFoundException(HttpStatus.NOT_FOUND.value());
-
-        }
+        });
     }
 
 
@@ -139,14 +130,10 @@ public class UserService {
     // méthode de vérification de force du mdp
     private boolean isPasswordStrong(String password) {
 
+        // au moins une majuscule, un chiffre, un caractère spécial et minimum 8 caractères
         String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$";
 
         return password.matches(regex);
 
-    }
-
-
-    public User getById(Long id) {
-        return userRepository.getUserById(id);
     }
 }

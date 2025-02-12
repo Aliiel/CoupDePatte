@@ -14,11 +14,6 @@ import org.springframework.stereotype.Service;
 public class CityService {
 
     private final CityRepository cityRepository;
-    private final UserRepository userRepository;
-
-    public City getUserById(Long id) {
-        return userRepository.getUserById(id).getCity();
-    }
 
     public City getByName(@NotBlank(message = "Précisez à proximité de quelle ville") String name) {
         //TODO add exception

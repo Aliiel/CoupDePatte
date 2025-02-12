@@ -36,5 +36,7 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     @Query("SELECT DISTINCT a FROM Advert a WHERE a.isFound = true AND a.city.id = :cityId AND a.pet.breed.id = :breedId")
     List<Advert> findUsersByMatchingFoundAdverts(@Param("cityId") Long cityId, @Param("breedId") Long breedId);
 
+    boolean existsByIsActiveFalse();
+
 
 }

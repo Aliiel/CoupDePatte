@@ -13,8 +13,5 @@ public interface CityMapper {
 
     City toEntity(CityDTO cityDTO);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    City partialUpdate(CityDTO cityDTO, @MappingTarget City city);
-    // permet d'ignorer les champs non renseignés et de conserver l'ancienne valeur en cas de mise à jour d'un objet
 
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class AdvertService {
@@ -166,11 +167,11 @@ public class AdvertService {
 
     public String createMsg(long id, MsgDTO msgDTO){
         if((msgDTO.email()== null) && (msgDTO.phone()==null)){
-            new BusinessLogicException("Merci de saisir votre adresse email et/ou votre numéro de téléphone pour"+
+            throw new BusinessLogicException("Merci de saisir votre adresse email et/ou votre numéro de téléphone pour"+
                     " permettre à l'annonceur de vous contacter");
         }
         if(msgDTO.date()== null){
-            new BusinessLogicException("Merci de préciser la date de l'événement");
+            throw new BusinessLogicException("Merci de préciser la date de l'événement");
         }
 
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
@@ -237,6 +238,7 @@ public class AdvertService {
 
     }
 
+
     public String updAnswer(long id, MsgDTO msgDTO){
         return answerServ.updateAnswer(id,msgDTO);
 
@@ -256,5 +258,8 @@ public class AdvertService {
         lstMsgDTO.sort(new OrderByDate());
         return lstMsgDTO;
     }
+
+
+
 }
 
