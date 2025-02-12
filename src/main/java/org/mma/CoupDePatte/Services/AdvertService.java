@@ -210,6 +210,7 @@ public class AdvertService {
         message.setDate(msgDTO.date());
         message.setAdvert(advert);
         msgRep.save(message);
+        notificationsServ.sendNewMsgNotification(msgDTO,advert);
         return "Votre message est bien envoyé";
     }
 
@@ -233,6 +234,7 @@ public class AdvertService {
         }else {
             answerServ.createAnswer(msgDTO,advert,user,msgTrouveDefault);
         }
+        notificationsServ.sendNewAnswerNotification(msgDTO,user);
         return "Votre message est bien envoyé";
 
     }

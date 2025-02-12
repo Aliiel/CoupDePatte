@@ -37,7 +37,8 @@ public class PetController {
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<PetResponseDTO> updDTOPet(@PathVariable long id,@RequestBody PetDTO petDTO){
-        return ResponseEntity.status(HttpStatus.FOUND).body(petServ.updateDTOPet(id, petDTO));
+    public ResponseEntity<Pet> updPet(@PathVariable long id,@RequestBody PetDTO petDTO){
+        return ResponseEntity.status(HttpStatus.FOUND).body(petServ.updatePet(id, petDTO));
     }
+
 }

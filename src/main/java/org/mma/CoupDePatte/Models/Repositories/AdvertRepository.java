@@ -20,15 +20,9 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     Optional<Advert> findByIdAndIsActiveFalse(Long id);
 
     //Annonces "Trouvé"
-
-    ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundTrue
-            (City city, Date eventDate);
     ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundTrueAndPetInOrderByEventDateDesc
             (City city, Date eventDate, ArrayList<Pet> pets);
     //Annonces "Perdu"
-
-    ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundFalse
-    (City city, Date eventDate);
     ArrayList<Advert> findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundFalseAndPetInOrderByEventDateDesc
             (City city, Date eventDate,ArrayList<Pet> pets);
 
