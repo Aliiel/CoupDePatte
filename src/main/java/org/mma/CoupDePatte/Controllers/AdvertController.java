@@ -42,15 +42,17 @@ public class AdvertController {
     }
 
     @PatchMapping("/update/admin/active/{id}")
-    public void updAdvActivation(@PathVariable long id){
+    public ResponseEntity<Void> updAdvActivation(@PathVariable long id){
         advServ.updAdvActive(id);
 
+        return null;
     }
 
     @PatchMapping("/update/active/{id}")
-    public void updAdvUnActivation(@PathVariable long id){
+    public ResponseEntity<Void> updAdvUnActivation(@PathVariable long id){
         advServ.updAdvUnActive(id);
 
+        return null;
     }
 
     @PostMapping("/message/{id}")
