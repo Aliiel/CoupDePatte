@@ -47,7 +47,7 @@ public class AdvertControllerTests {
 
         ResponseEntity<AdvertResponseDTO> response = advertController.getAdvertbyId(1L);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.FOUND, response.getStatusCode());
         assertEquals(advertResponseDTO, response.getBody());
     }
 
