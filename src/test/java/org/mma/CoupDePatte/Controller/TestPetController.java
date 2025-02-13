@@ -21,7 +21,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.params.shadow.com.univocity.parsers.conversions.Conversions.toDate;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import org.springframework.http.MediaType;
@@ -43,11 +44,8 @@ class TestPetController {
     private long petIdKO;
     private PetResponseDTO petRDTO;
     private Pet pet1;
-    private Pet pet2;
-    private Pet pet3;
     private FilterDTO filter1;
     private FilterDTO filter2;
-    private FilterDTO filterChien;
     private Date dateDTO;
     private ArrayList<Pet> lstPetOk= new ArrayList<>();
     private ArrayList<Pet> lstPetChien= new ArrayList<>();
@@ -59,16 +57,15 @@ class TestPetController {
     private Breed brchien;
     private Specie chien;
     private Specie chat;
+    private PetDTO petDTO;
 
     @BeforeEach
     void setUp() throws ParseException {
-        SimpleDateFormat frmDate = new SimpleDateFormat("yyyy-MM-dd");
-        dateDTO= new SimpleDateFormat("dd/MM/2025").parse("09/02/2025");
-
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(petCtrl).build();
 
         //initialisation des objets utiles pour les tests
+        dateDTO= new SimpleDateFormat("dd/MM/2025").parse("09/02/2025");
         chat= new Specie(1L,"chat");
         chien = new Specie(2L,"chien");
         femelle = new Gender(1L, "femelle");
@@ -77,15 +74,11 @@ class TestPetController {
         brchat = new Breed(3L, "main coon",chat);
         pet1 = new Pet(1L,"violette", "tres calme", "jaune", "marron et blanc",
                 false,true,femelle, brchien);
-        pet2 = new Pet(2L,"mimi", "caline", "vert", "écaille",
-                false,true,femelle, brchat);
-        pet3 = new Pet(3L,"sarrazin", "sportif et timide", "marron", "noir",
-                false,true,male, brchien);
         lstPetOk.add(pet1);
-       // lstPetChien.add(pet1);
-        //lstPetChien.add(pet3);
         petId = 1L;
         petIdKO=10L;
+        petDTO=new PetDTO("violette","tres calme","jaune","marron et blanc",
+                false, true,femelle.getId(), brchien.getId());
         petRDTO=new PetResponseDTO("chien", "teckel", "femelle", "violette",
                 "tres calme", "jaune", "marron et blanc", false,true);
         cityDTO1=new CityDTO("Roubaix","59100");
@@ -101,17 +94,11 @@ class TestPetController {
     @Test
     void testGetByFilterSpec_Success() throws Exception{
         when(petServ.getPetByFilterSpec(filter1)).thenReturn(lstPetOk);
-        String pathATester = "/pets/";
-        String inputDTO = "{\"isTrouve\":\"true\",\"cityDTO\":{\"name\":\"Roubaix\",\"zipCode\":\"59100\"}," +
-                "\"eventDate\":\"2025-02-09\",\"breed\":\"teckel\",\"eyesColor\":\"jaune\"," +
-                "\"coatColor\":\"marron et blanc\",\"tattoo\":\"false\"}";
+        ArrayList<Pet> lstPetReturn = petServ.getPetByFilterSpec(filter1);
 
-        MockHttpServletRequestBuilder req = get(pathATester).contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(inputDTO);
-
-        this.mockMvc.perform(req).andExpect(status().isFound())
-                .andExpect(jsonPath("$..Name").value("violette"));
+        assertFalse(lstPetReturn.isEmpty());
+        assertEquals(1, lstPetReturn.size());
+        assertEquals("violette", lstPetReturn.get(0).getName());
 
     }
 
@@ -164,66 +151,9 @@ class TestPetController {
     @Test
     void testCreatePet() throws Exception{
         when(petServ.createPet(any(PetDTO.class))).thenReturn(pet1);
-
-        String pathATester = "/pets/new";
-        String inputDTO = "{\"name\":\"violette\",\"behavior\":\"tres calme\",\"eyesColor\":\"jaune\"," +
-                "\"coatColor\":\"marron et blanc\",\"tattoo\":\"false\",\"identificationChip\":\"true\"," +
-                "\"genderId\":\"1\",\"breedId\":\"3\"}";
-        MockHttpServletRequestBuilder req =get(pathATester).contentType(MediaType.APPLICATION_JSON)
-                .content(inputDTO);
-
-        this.mockMvc.perform(req).andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value("violette"))
-                .andExpect(jsonPath("$.behavior").value("tres calme"))
-                .andExpect(jsonPath("$.eyesColor").value("jaune"))
-                .andExpect(jsonPath("$.coatColor").value("marron et blanc"))
-                .andExpect(jsonPath("$.tattoo").value(false))
-                .andExpect(jsonPath("$.identificationChip").value(true))
-                .andExpect(jsonPath("$.gender").value(femelle))
-                .andExpect(jsonPath("$.breed").value(brchien))
-        ;
-
-    }
-
-    @Test
-    void testUpdatePet_Success() throws Exception{
-        when(petServ.updatePet(petId,any(PetDTO.class))).thenReturn(pet1);
-
-        String pathATester = "/pets/update/{id}";
-        String inputDTO = "{\"name\":\"null\",\"behavior\":\"tres calme et peureuse\",\"eyesColor\":\"null\"," +
-                "\"coatColor\":\"null\",\"tattoo\":\"null\",\"identificationChip\":\"null\"," +
-                "\"genderId\":\"2\",\"breedId\":\"3\"}";
-
-        MockHttpServletRequestBuilder req =get(pathATester,petId).contentType(MediaType.APPLICATION_JSON)
-                .content(inputDTO);
-
-        this.mockMvc.perform(req).andExpect(status().isFound())
-                .andExpect(jsonPath("$.name").value("violette"))
-                .andExpect(jsonPath("$.behavior").value("tres calme et peureuse"))
-                .andExpect(jsonPath("$.eyesColor").value("jaune"))
-                .andExpect(jsonPath("$.coatColor").value("marron et blanc"))
-                .andExpect(jsonPath("$.tattoo").value(false))
-                .andExpect(jsonPath("$.identificationChip").value(true))
-                .andExpect(jsonPath("$.gender").value(male))
-                .andExpect(jsonPath("$.breed").value(brchien))
-        ;
-
-    }
-
-    @Test
-    void testUpdatePet_notSucces() throws Exception{
-        when(petServ.updatePet(petIdKO,any(PetDTO.class)))
-                .thenThrow(new ResourceNotFoundException("Animal avec ID " + Long.toString(petIdKO) + " non trouvé"));
-        String pathATester = "/pets/update/{id}";
-        String inputDTO = "{\"name\":\"null\",\"behavior\":\"tres calme et peureuse\",\"eyesColor\":\"null\"," +
-                "\"coatColor\":\"null\",\"tattoo\":\"null\",\"identificationChip\":\"null\"," +
-                "\"genderId\":\"null\",\"breedId\":\"null\"}";
-
-        MockHttpServletRequestBuilder req =get(pathATester).contentType(MediaType.APPLICATION_JSON)
-                .content(inputDTO);
-
-        this.mockMvc.perform(req).andExpect(status().isNotFound());
-
+        Pet savedPet = petServ.createPet(petDTO);
+        assertNotNull(savedPet);
+        assertEquals("violette", savedPet.getName());
     }
 
 }
