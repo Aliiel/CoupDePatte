@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: CoupDePatte
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dbpet
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+application:
+  security:
+    jwt:
+      secret-key: f3d54c6aa751c0c30783a4dc2e6c08f9b8a0dabe2950fb3b7a5c5482e14b1bb6
+      expiration-time: 86400000 # 1 jour
+server:
+  servlet:
+    context-path: /api/
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+

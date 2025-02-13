@@ -22,10 +22,9 @@ public class AdvertController {
         this.advServ = advServices;
     }
 
-
     @GetMapping("/{id}")
-    public ResponseEntity<AdvertResponseDTO> getAdvertbyId(@PathVariable long id){
-        return ResponseEntity.status(HttpStatus.FOUND).body(advServ.getDTOById(id));
+    public ResponseEntity<AdvertResponseDTO> getAdvertbyId(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(advServ.getDTOById(id));
 
     }
 
