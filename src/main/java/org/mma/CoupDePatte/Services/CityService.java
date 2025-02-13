@@ -34,6 +34,7 @@ public class CityService {
 
                         +", code postal " + cityDTO.getZipCode()+" inconnue"));
     }
+
     public City getByDTO(CityDTO cityDTO){
         Optional<City> optionalCity = cityRepository.findByNameIgnoreCaseAndZipCodeIgnoreCase(cityDTO.getName(), cityDTO.getZipCode());
         return optionalCity.orElseGet(() -> createCity(cityDTO));

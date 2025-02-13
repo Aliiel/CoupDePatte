@@ -43,42 +43,44 @@ public class DataInitializer {
             admin.setRole(adminRole.orElse(null));
             userRepository.save(admin);
 
-            Gender gender1 = new Gender(null,"femelle");
-            Gender gender2 = new Gender(null,"mâle");
-            genderRepository.saveAll(List.of(gender1, gender2));
+            if (genderRepository.count() == 0) {
+                Gender gender1 = new Gender(null,"femelle");
+                Gender gender2 = new Gender(null,"mâle");
+                genderRepository.saveAll(List.of(gender1, gender2));
 
-            Specie specie1 = new Specie(null,"chat");
-            Specie specie2 = new Specie(null,"chien");
-            specieRepository.saveAll(List.of(specie1, specie2));
+                Specie specie1 = new Specie(null,"chat");
+                Specie specie2 = new Specie(null,"chien");
+                specieRepository.saveAll(List.of(specie1, specie2));
 
-            Specie spChat = specieRepository.findByName("chat");
-            Specie spChien = specieRepository.findByName("chien");
+                Specie spChat = specieRepository.findByName("chat");
+                Specie spChien = specieRepository.findByName("chien");
 
-            List<Breed> breeds = List.of(
-                    new Breed(null, "européen", spChat),
-                    new Breed(null, "bâtard", spChien),
-                    new Breed(null, "bengal", spChat),
-                    new Breed(null, "siamois", spChat),
-                    new Breed(null, "main coon", spChat),
-                    new Breed(null, "chartreux", spChat),
-                    new Breed(null, "sphynx", spChat),
-                    new Breed(null, "scottish fold", spChat),
-                    new Breed(null, "persan", spChat),
-                    new Breed(null, "inconnu", spChien),
-                    new Breed(null, "labrador", spChien),
-                    new Breed(null, "berger allemand", spChien),
-                    new Breed(null, "cocker", spChien),
-                    new Breed(null, "setter", spChien),
-                    new Breed(null, "pitbull", spChien),
-                    new Breed(null, "beagle", spChien),
-                    new Breed(null, "rottweiler", spChien),
-                    new Breed(null, "dogue allemand", spChien),
-                    new Breed(null, "cane corso", spChien),
-                    new Breed(null, "husky", spChien)
-            );
+                List<Breed> breeds = List.of(
+                        new Breed(null, "européen", spChat),
+                        new Breed(null, "bâtard", spChien),
+                        new Breed(null, "bengal", spChat),
+                        new Breed(null, "siamois", spChat),
+                        new Breed(null, "main coon", spChat),
+                        new Breed(null, "chartreux", spChat),
+                        new Breed(null, "sphynx", spChat),
+                        new Breed(null, "scottish fold", spChat),
+                        new Breed(null, "persan", spChat),
+                        new Breed(null, "inconnu", spChien),
+                        new Breed(null, "labrador", spChien),
+                        new Breed(null, "berger allemand", spChien),
+                        new Breed(null, "cocker", spChien),
+                        new Breed(null, "setter", spChien),
+                        new Breed(null, "pitbull", spChien),
+                        new Breed(null, "beagle", spChien),
+                        new Breed(null, "rottweiler", spChien),
+                        new Breed(null, "dogue allemand", spChien),
+                        new Breed(null, "cane corso", spChien),
+                        new Breed(null, "husky", spChien)
+                );
 
-            breedRepository.saveAll(breeds);
-            log.info("✅ Données initiales insérées avec succès !");
+                breedRepository.saveAll(breeds);
+                log.info("✅ Données initiales insérées avec succès !");
+            }
         };
     }
 }

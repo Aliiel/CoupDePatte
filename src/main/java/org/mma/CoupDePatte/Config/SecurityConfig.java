@@ -31,8 +31,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers(AUTH_WHITELIST).permitAll()
-                                .anyRequest().authenticated())
+                                .anyRequest().permitAll())
                 .sessionManagement(
                         sessionManagement -> sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -42,4 +41,6 @@ public class SecurityConfig {
 
                 return http.build();
     }
+
+
 }

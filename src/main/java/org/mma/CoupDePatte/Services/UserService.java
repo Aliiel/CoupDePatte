@@ -74,7 +74,7 @@ public class UserService {
             CityDTO cityDTO = userDTO.getCity();
             log.info("city recup de la saisie : " + cityDTO.getName() + " - " + cityDTO.getZipCode());
 
-            Optional<City> existingCity = cityRepository.findCity(cityDTO.getName(), cityDTO.getZipCode());
+            Optional<City> existingCity = cityRepository.findByNameIgnoreCaseAndZipCodeIgnoreCase(cityDTO.getName(), cityDTO.getZipCode());
 
             City city = existingCity.orElseGet(() -> cityRepository.save(cityMapper.toEntity(cityDTO)));
 
@@ -145,6 +145,11 @@ public class UserService {
 
     }
 
+    boolean isUserUpdated(UserDTO userDTO) {
+
+        return userDTO.getPhone()!=null;
+
+    }
 
     public User getById(Long id) {
         return userRepository.getUserById(id);
