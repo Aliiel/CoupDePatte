@@ -70,7 +70,6 @@ public class AdvertController {
     @PatchMapping("/answer/update/{id}")
     public ResponseEntity<String>  updateAnswer(@PathVariable long id, @RequestBody MsgDTO msgDTO){
         return ResponseEntity.status(HttpStatus.OK).body(advServ.updAnswer(id,msgDTO));
-
     }
 
     @GetMapping("/answer/consult/{id}")

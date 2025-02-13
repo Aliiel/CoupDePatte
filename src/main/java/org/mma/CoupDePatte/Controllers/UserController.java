@@ -1,17 +1,20 @@
 package org.mma.CoupDePatte.Controllers;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.mma.CoupDePatte.Models.DTO.AnswerDTO;
+import lombok.extern.slf4j.Slf4j;
+import org.mma.CoupDePatte.Models.DTO.AnswerReponseDTO;
 import org.mma.CoupDePatte.Models.DTO.UserDTO;
+import org.mma.CoupDePatte.Models.Entities.User;
 import org.mma.CoupDePatte.Services.AnswerService;
 import org.mma.CoupDePatte.Services.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -30,20 +33,23 @@ public class UserController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<UserDTO> partialUpdateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        return ResponseEntity.of(userService.updateUser(id, userDTO));
+        return ResponseEntity.ok(userService.updateUser(id, userDTO));
     }
 
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
 
 
-    @GetMapping("/{id}/answers")
-    public ResponseEntity<List<AnswerDTO>> getAnswersByUser(@PathVariable Long id) {
+    @GetMapping("/answers")
+    public ResponseEntity<List<AnswerReponseDTO>> getAnswersByUser(@AuthenticationPrincipal User user) {
 
-        List<AnswerDTO> answers = answerService.getAnswersByUserId(id);
+        Long id = user.getId();
+
+        List<AnswerReponseDTO> answers = answerService.getAnswersByUserId(id);
 
         return ResponseEntity.ok(answers);
     }

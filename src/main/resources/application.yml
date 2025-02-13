@@ -29,4 +29,5 @@ logging:
     org:
       springframework:
         security: DEBUG
+        web: DEBUG
 

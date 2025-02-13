@@ -34,10 +34,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final CityRepository cityRepository;
     private final UserMapper userMapper;
-    private final CityMapper cityMapper;
     private final RoleRepository roleRepository;
+    private final CityService cityService;
+    private final CityMapper cityMapper;
+    private final CityRepository cityRepository;
 
 
     // méthode pour créer un utilisateur à partir de username, password et email
@@ -48,15 +49,11 @@ public class UserService {
             throw new UserAlreadyExistsException(HttpStatus.CONFLICT.value());
         }
 
-        if (!isPasswordStrong(registrationRequest.password())) {
-            throw new InvalidPasswordException(HttpStatus.BAD_REQUEST.value());
-        }
-
         User user = new User();
         user.setUsername(registrationRequest.username());
         user.setEmail(registrationRequest.email());
         user.setPassword(passwordEncoder.encode(registrationRequest.password()));
-        Optional<Role> role = roleRepository.findByName("USER");
+        Optional<Role> role = roleRepository.findByName("ROLE_USER");
         role.ifPresent(user::setRole);
         userRepository.save(user);
         final String token = jwtService.generateToken(user);
@@ -65,23 +62,25 @@ public class UserService {
     }
 
 
-    public Optional<UserDTO> updateUser(Long id, UserDTO userDTO) {
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
 
-        return userRepository.findById(id).map(existingUser -> {
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(HttpStatus.NOT_FOUND.value()));
 
-            CityDTO cityDTO = userDTO.getCity();
-            log.info("City récupérée de la saisie : " + cityDTO.getName() + " - " + cityDTO.getZipCode());
+        CityDTO cityDTO = cityService.findOrCreateCity(userDTO.getCity());
 
-            City city = cityRepository.findCity(cityDTO.getName(), cityDTO.getZipCode())
-                    .orElseGet(() -> cityRepository.save(cityMapper.toEntity(cityDTO)));
+        log.info("cityDTO: {}", cityDTO);
 
-            userMapper.partialUpdate(userDTO, existingUser);
-            existingUser.setCity(city);
+        City city = cityMapper.toEntity(cityDTO);
 
-            User userUpdated = userRepository.save(existingUser);
-            return userMapper.toUserDTO(userUpdated);
+        log.info("city: {}", city.getName());
 
-        });
+        userMapper.partialUpdate(userDTO, existingUser);
+        existingUser.setCity(city);
+        log.info("city de userDTO: {}", existingUser.getCity().getName());
+
+        userRepository.save(existingUser);
+
+        return userMapper.toUserDTO(existingUser);
     }
 
 
@@ -123,17 +122,21 @@ public class UserService {
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException(HttpStatus.NOT_FOUND.value());
         }
+
         userRepository.deleteById(id);
     }
 
 
-    // méthode de vérification de force du mdp
-    private boolean isPasswordStrong(String password) {
+    public Optional<UserDTO> getUserById(Long id) {
 
-        // au moins une majuscule, un chiffre, un caractère spécial et minimum 8 caractères
-        String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$";
+        return userRepository.findById(id)
+                .map(userMapper::toUserDTO);
+    }
 
-        return password.matches(regex);
 
+
+    public boolean isUserUpdated (UserDTO userDTO) {
+
+        return !userDTO.getPhone().isEmpty();
     }
 }

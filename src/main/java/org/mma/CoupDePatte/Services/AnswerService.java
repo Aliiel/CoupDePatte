@@ -3,15 +3,13 @@ package org.mma.CoupDePatte.Services;
 import lombok.RequiredArgsConstructor;
 import org.mma.CoupDePatte.Exceptions.NoAnswersFoundException;
 import org.mma.CoupDePatte.Exceptions.ResourceNotFoundException;
-import org.mma.CoupDePatte.Exceptions.UserNotFoundException;
-import org.mma.CoupDePatte.Models.DTO.AnswerDTO;
+import org.mma.CoupDePatte.Models.DTO.AnswerReponseDTO;
 import org.mma.CoupDePatte.Models.DTO.MsgDTO;
 import org.mma.CoupDePatte.Models.Entities.Advert;
 import org.mma.CoupDePatte.Models.Entities.Answer;
 import org.mma.CoupDePatte.Models.Entities.User;
 import org.mma.CoupDePatte.Models.Mappers.AnswerMapper;
 import org.mma.CoupDePatte.Models.Repositories.AnswerRepository;
-import org.mma.CoupDePatte.Models.Repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,6 @@ import java.util.*;
 public class AnswerService {
 
     private final AnswerRepository answerRep;
-    private final UserRepository userRepository;
     private final AnswerMapper answerMapper;
 
 
@@ -66,22 +63,23 @@ public class AnswerService {
     }
 
 
-    public List<AnswerDTO> getAnswersByUserId(Long id) {
+    public List<AnswerReponseDTO> getAnswersByUserId(Long id) {
 
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(HttpStatus.NOT_FOUND.value()));
+        List<AnswerReponseDTO> userAnswers = answerMapper.toDTOList(answerRep.findByUser_Id(id));
 
+        List<AnswerReponseDTO> activeAnswers = new ArrayList<>();
 
-        List<AnswerDTO> userAnswers = answerMapper.toDTOList(answerRep.findByUser_Id(user.getId()));
+        for (AnswerReponseDTO userAnswer : userAnswers) {
 
-        if (userAnswers.isEmpty()) {
-
-            throw new NoAnswersFoundException(HttpStatus.INTERNAL_SERVER_ERROR.value());
-
+            if (Boolean.TRUE.equals(userAnswer.getAdvert().isActive())) {
+                activeAnswers.add(userAnswer);
+            }
         }
 
-        return userAnswers;
+        if (userAnswers.isEmpty() || activeAnswers.isEmpty()) {
 
+            throw new NoAnswersFoundException(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        }
+        return activeAnswers;
     }
-
 }

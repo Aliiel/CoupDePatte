@@ -1,5 +1,6 @@
 package org.mma.CoupDePatte.Controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.mma.CoupDePatte.Models.DTO.AuthenticationRequest;
 import org.mma.CoupDePatte.Models.DTO.RegistrationRequest;
@@ -25,7 +26,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegistrationRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegistrationRequest request) {
 
         return ResponseEntity.ok(userService.registerUser(request));
     }

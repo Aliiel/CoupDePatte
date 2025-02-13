@@ -3,21 +3,25 @@ package org.mma.CoupDePatte.Services;
 import lombok.extern.slf4j.Slf4j;
 import org.mma.CoupDePatte.Comparators.OrderByDate;
 import org.mma.CoupDePatte.Exceptions.BusinessLogicException;
+import org.mma.CoupDePatte.Exceptions.NoAdvertsFoundException;
 import org.mma.CoupDePatte.Exceptions.ResourceNotFoundException;
 import org.mma.CoupDePatte.Models.DTO.AdvertDTO;
 import org.mma.CoupDePatte.Models.DTO.AdvertResponseDTO;
 import org.mma.CoupDePatte.Models.DTO.FilterDTO;
 import org.mma.CoupDePatte.Models.DTO.MsgDTO;
 import org.mma.CoupDePatte.Models.Entities.*;
+import org.mma.CoupDePatte.Models.Mappers.AdvertMapStructMapper;
 import org.mma.CoupDePatte.Models.Mappers.AdvertMapper;
 import org.mma.CoupDePatte.Models.Mappers.MsgMapper;
 import org.mma.CoupDePatte.Models.Mappers.PetMapper;
 import org.mma.CoupDePatte.Models.Repositories.AdvertRepository;
 import org.mma.CoupDePatte.Models.Repositories.MessageRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,11 +38,13 @@ public class AdvertService {
     String msgTrouveDefault;
     String msgPerduDefault;
     NotificationsService notificationsServ;
+    AdvertMapStructMapper advertMapStructMapper;
 
     public AdvertService(AdvertRepository advertRepository, PetService petService,
                          CityService cityService, UserService userService, AdvertMapper advMapper,
                          PetMapper petMapper, MsgMapper msgMapper,
-                         MessageRepository msgRepository, AnswerService answerService, NotificationsService notificationsServ ) {
+                         MessageRepository msgRepository, AnswerService answerService, NotificationsService notificationsServ,
+                         AdvertMapStructMapper advertMapStructMapper) {
         this.advertRep= advertRepository;
         this.msgRep= msgRepository;
         this.notificationsServ= notificationsServ;
@@ -49,6 +55,7 @@ public class AdvertService {
         this.advMap = advMapper;
         this.msgMap = msgMapper;
         this.petMap=petMapper;
+        this.advertMapStructMapper=advertMapStructMapper;
         this.msgTrouveDefault="Cette personne a peut-être trouvé votre animal";
         this.msgPerduDefault="Cette personne a perdu un animal ressemblant à celui que vous avez trouvé";
     }
@@ -260,6 +267,16 @@ public class AdvertService {
     }
 
 
+    public List<AdvertResponseDTO> findAdvertsByUserId(long id){
 
+        List<Advert> userAdverts = advertRep.findByUser_Id(id);
+        List<AdvertResponseDTO> userAdvertsDTO = advertMapStructMapper.toDTOList(userAdverts);
+
+        if (userAdvertsDTO.isEmpty()) {
+
+            throw new NoAdvertsFoundException(HttpStatus.NOT_FOUND.value());
+        }
+        return userAdvertsDTO;
+    }
 }
 
