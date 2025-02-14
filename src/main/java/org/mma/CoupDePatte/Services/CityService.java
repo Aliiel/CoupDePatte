@@ -2,9 +2,11 @@ package org.mma.CoupDePatte.Services;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.mma.CoupDePatte.Exceptions.ResourceNotFoundException;
 import org.mma.CoupDePatte.Models.DTO.CityDTO;
 import org.mma.CoupDePatte.Models.Entities.City;
+import org.mma.CoupDePatte.Models.Mappers.CityMapper;
 import org.mma.CoupDePatte.Models.Repositories.CityRepository;
 import org.mma.CoupDePatte.Models.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -12,15 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CityService {
 
     private final CityRepository cityRepository;
-    private final UserRepository userRepository;
-
-    public City getUserById(Long id) {
-        return userRepository.getUserById(id).getCity();
-    }
+    private final CityMapper cityMapper;
 
     public City getByName(@NotBlank(message = "Précisez à proximité de quelle ville") String name) {
         //TODO add exception
@@ -45,5 +44,16 @@ public class CityService {
         city.setZipCode(cityDTO.getZipCode());
         cityRepository.save(city);
         return city;
-    }   
+    }
+
+
+    public CityDTO findOrCreateCity(CityDTO cityDTO){
+        log.info("findOrCreateCity cityDTO = " + cityDTO);
+        City city = cityRepository.findByNameIgnoreCaseAndZipCodeIgnoreCase(cityDTO.getName(), cityDTO.getZipCode())
+                .orElseGet(() -> cityRepository.save(cityMapper.toEntity(cityDTO)));
+
+        log.info("city = " + city.getName());
+        return cityMapper.toCityDTO(city);
+
+    }
 }

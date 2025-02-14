@@ -1,7 +1,6 @@
 package org.mma.CoupDePatte.Controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.mma.CoupDePatte.Models.DTO.RegistrationResponse;
 import org.mma.CoupDePatte.Models.DTO.UserDTO;
 import org.mma.CoupDePatte.Services.UserService;
 import org.springframework.http.ResponseEntity;

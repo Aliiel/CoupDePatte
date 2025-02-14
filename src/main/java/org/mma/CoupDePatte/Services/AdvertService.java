@@ -35,9 +35,9 @@ public class AdvertService {
     String msgPerduDefault;
     NotificationsService notificationsService;
 
-    public AdvertService(AdvertRepository advertRepository, PetService petService,CityService cityService,
-            UserService userService, AdvertMapper advMapper, PetMapper petMapper, MsgMapper msgMapper,UserMapper userMapper,
-            MessageRepository msgRepository, AnswerService answerService, NotificationsService notificationsService ) {
+    public AdvertService(AdvertRepository advertRepository, PetService petService, CityService cityService,
+                         UserService userService, AdvertMapper advMapper, PetMapper petMapper, MsgMapper msgMapper, UserMapper userMapper,
+                         MessageRepository msgRepository, AnswerService answerService, NotificationsService notificationsService ) {
         this.advertRep= advertRepository;
         this.msgRep= msgRepository;
         this.notificationsService = notificationsService;
