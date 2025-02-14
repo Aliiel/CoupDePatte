@@ -3,7 +3,10 @@ package org.mma.CoupDePatte.Services;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mma.CoupDePatte.Exceptions.*;
+import org.mma.CoupDePatte.Exceptions.InvalidCredentialsException;
+import org.mma.CoupDePatte.Exceptions.ResourceNotFoundException;
+import org.mma.CoupDePatte.Exceptions.UserAlreadyExistsException;
+import org.mma.CoupDePatte.Exceptions.UserNotFoundException;
 import org.mma.CoupDePatte.Models.DTO.*;
 import org.mma.CoupDePatte.Models.Entities.City;
 import org.mma.CoupDePatte.Models.Entities.Role;
@@ -34,10 +37,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final CityRepository cityRepository;
     private final UserMapper userMapper;
-    private final CityMapper cityMapper;
     private final RoleRepository roleRepository;
+    private final CityService cityService;
+    private final CityMapper cityMapper;
+    private final CityRepository cityRepository;
 
 
     // méthode pour créer un utilisateur à partir de username, password et email
@@ -48,15 +52,11 @@ public class UserService {
             throw new UserAlreadyExistsException(HttpStatus.CONFLICT.value());
         }
 
-        if (!isPasswordStrong(registrationRequest.password())) {
-            throw new InvalidPasswordException(HttpStatus.BAD_REQUEST.value());
-        }
-
         User user = new User();
         user.setUsername(registrationRequest.username());
         user.setEmail(registrationRequest.email());
         user.setPassword(passwordEncoder.encode(registrationRequest.password()));
-        Optional<Role> role = roleRepository.findByName("USER");
+        Optional<Role> role = roleRepository.findByName("ROLE_USER");
         role.ifPresent(user::setRole);
         userRepository.save(user);
         final String token = jwtService.generateToken(user);
@@ -67,30 +67,23 @@ public class UserService {
 
     public UserDTO updateUser(Long id, UserDTO userDTO) {
 
-        Optional<User> existingUser = userRepository.findById(id);
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(HttpStatus.NOT_FOUND.value()));
 
-        if (existingUser.isPresent()) {
+        CityDTO cityDTO = cityService.findOrCreateCity(userDTO.getCity());
 
-            CityDTO cityDTO = userDTO.getCity();
-            log.info("city recup de la saisie : " + cityDTO.getName() + " - " + cityDTO.getZipCode());
+        log.info("cityDTO: {}", cityDTO);
 
-            Optional<City> existingCity = cityRepository.findByNameIgnoreCaseAndZipCodeIgnoreCase(cityDTO.getName(), cityDTO.getZipCode());
+        City city = cityMapper.toEntity(cityDTO);
 
-            City city = existingCity.orElseGet(() -> cityRepository.save(cityMapper.toEntity(cityDTO)));
+        log.info("city: {}", city.getName());
 
-            existingUser.get().setCity(city);
-            existingUser.get().setLastName(userDTO.getLastName());
+        userMapper.partialUpdate(userDTO, existingUser);
+        existingUser.setCity(city);
+        log.info("city de userDTO: {}", existingUser.getCity().getName());
 
+        userRepository.save(existingUser);
 
-            User userUpdated = userRepository.save(existingUser.get());
-
-            return userMapper.toUserDTO(userUpdated);
-
-        } else {
-
-            throw new UserNotFoundException(HttpStatus.NOT_FOUND.value());
-
-        }
+        return userMapper.toUserDTO(existingUser);
     }
 
 
@@ -103,9 +96,9 @@ public class UserService {
 
 
     public User getByEmail(String email){
-         User user = userRepository.findByEmail(email)
-                        .orElseThrow(() -> new ResourceNotFoundException("Utilisateur avec email " + email + " inconnu"));
-                return user;
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur avec email " + email + " inconnu"));
+        return user;
     }
 
 
@@ -127,31 +120,23 @@ public class UserService {
         }
     }
 
-
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException(HttpStatus.NOT_FOUND.value());
-        }
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur avec ID " + id + " inconnu"));
+
+        userRepository.delete(user);
     }
 
+    public Optional<UserDTO> getUserById(Long id) {
 
-    // méthode de vérification de force du mdp
-    private boolean isPasswordStrong(String password) {
-
-        String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$";
-
-        return password.matches(regex);
-
+        return userRepository.findById(id)
+                .map(userMapper::toUserDTO);
     }
 
-    boolean isUserUpdated(UserDTO userDTO) {
-
+    public boolean isUserUpdated (UserDTO userDTO) {
+        //champs non chargés sont null donc test sur null à la place de empty
         return userDTO.getPhone()!=null;
 
     }
 
-    public User getById(Long id) {
-        return userRepository.getUserById(id);
-    }
 }

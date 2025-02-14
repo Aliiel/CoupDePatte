@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -59,9 +60,11 @@ public class Advert {
     private City city;
 
     @OneToMany(mappedBy = "advert", orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private Set<Message> messages = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "advert", orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private Set<Answer> answers = new LinkedHashSet<>();
 
 }
