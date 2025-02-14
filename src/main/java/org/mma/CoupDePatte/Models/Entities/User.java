@@ -2,6 +2,7 @@ package org.mma.CoupDePatte.Models.Entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,7 +54,12 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private Set<Answer> answers = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    private Set<Advert> adverts = new LinkedHashSet<>();
 
     @Override
     public boolean isAccountNonExpired() {

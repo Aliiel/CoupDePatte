@@ -79,9 +79,10 @@ public class DataInitializer {
                         new Breed(null, "cane corso", spChien),
                         new Breed(null, "husky", spChien)
                 );
+
                 breedRepository.saveAll(breeds);
+                log.info("✅ Données initiales insérées avec succès !");
             }
-            log.info("✅ Données initiales insérées avec succès !");
         };
     }
 }

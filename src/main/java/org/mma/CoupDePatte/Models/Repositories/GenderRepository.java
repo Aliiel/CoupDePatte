@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface GenderRepository extends JpaRepository<Gender, Long> {
 
-    Gender getById(Long id);
+    Optional<Gender> findById(Long id);
 
     Optional<Gender> findByName(String name);
 }

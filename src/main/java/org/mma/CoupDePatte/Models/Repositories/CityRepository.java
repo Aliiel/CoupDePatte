@@ -8,7 +8,5 @@ import java.util.Optional;
 
 public interface CityRepository extends JpaRepository<City, Long> {
 
-    Optional<City> findByName(String name);
-
-    Optional<City> findByNameAndZipCodeIgnoreCase(String name, String zipCode);
+    Optional<City> findByNameIgnoreCaseAndZipCodeIgnoreCase(String name, String zipCode);
 }

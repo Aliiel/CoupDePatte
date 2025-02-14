@@ -25,6 +25,12 @@ public class AdvertController {
     }
 
 
+    @GetMapping("/filter/")
+    public ResponseEntity<List<AdvertResponseDTO>> getAdvertByFilter(@RequestBody FilterDTO filterDTO){
+        return ResponseEntity.status(HttpStatus.FOUND).body(advServ.getByFilter(filterDTO));
+
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<AdvertResponseDTO> getAdvertbyId(@PathVariable long id){
         return ResponseEntity.status(HttpStatus.FOUND).body(advServ.getDTOById(id));
@@ -44,13 +50,14 @@ public class AdvertController {
 
     }
 
-    @Secured("ADMIN")
+
     @PatchMapping("/update/admin/active/{id}")
     public void updAdvActivation(@PathVariable long id){
         advServ.updAdvActive(id);
 
     }
 
+    @Secured("ADMIN")
     @PatchMapping("/update/active/{id}")
     public void updAdvUnActivation(@PathVariable long id){
         advServ.updAdvUnActive(id);

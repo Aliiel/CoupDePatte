@@ -8,7 +8,6 @@ import org.mma.CoupDePatte.Models.DTO.*;
 import org.mma.CoupDePatte.Models.Entities.City;
 import org.mma.CoupDePatte.Models.Entities.Role;
 import org.mma.CoupDePatte.Models.Entities.User;
-import org.mma.CoupDePatte.Models.Mappers.CityMapper;
 import org.mma.CoupDePatte.Models.Mappers.UserMapper;
 import org.mma.CoupDePatte.Models.Repositories.CityRepository;
 import org.mma.CoupDePatte.Models.Repositories.RoleRepository;
@@ -82,9 +81,9 @@ public class UserService {
 
 
     public User getByEmail(String email){
-         User user = userRepository.findByEmail(email)
-                        .orElseThrow(() -> new ResourceNotFoundException("Utilisateur avec email " + email + " inconnu"));
-                return user;
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur avec email " + email + " inconnu"));
+        return user;
     }
 
 
@@ -108,17 +107,21 @@ public class UserService {
 
 
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException(HttpStatus.NOT_FOUND.value());
-        }
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur avec ID " + id + " inconnu"));
 
-        userRepository.deleteById(id);
+        userRepository.delete(user);
     }
 
-
     public User getUserById(Long id) {
-
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(HttpStatus.NOT_FOUND.value()));
     }
+
+    public boolean isUserUpdated (UserDTO userDTO) {
+        //champs non chargés sont null donc test sur null à la place de empty
+        return userDTO.getPhone()!=null;
+
+    }
+
 }

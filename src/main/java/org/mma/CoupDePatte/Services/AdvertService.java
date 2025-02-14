@@ -14,6 +14,7 @@ import org.mma.CoupDePatte.Models.Mappers.AdvertMapStructMapper;
 import org.mma.CoupDePatte.Models.Mappers.AdvertMapper;
 import org.mma.CoupDePatte.Models.Mappers.MsgMapper;
 import org.mma.CoupDePatte.Models.Mappers.PetMapper;
+import org.mma.CoupDePatte.Models.Mappers.UserMapper;
 import org.mma.CoupDePatte.Models.Repositories.AdvertRepository;
 import org.mma.CoupDePatte.Models.Repositories.MessageRepository;
 import org.springframework.http.HttpStatus;
@@ -35,26 +36,29 @@ public class AdvertService {
     AnswerService answerServ;
     MsgMapper msgMap;
     PetMapper petMap;
+    UserMapper userMap;
     String msgTrouveDefault;
     String msgPerduDefault;
-    NotificationsService notificationsServ;
+    NotificationsService notificationsService;
     AdvertMapStructMapper advertMapStructMapper;
 
     public AdvertService(AdvertRepository advertRepository, PetService petService,
                          CityService cityService, UserService userService, AdvertMapper advMapper,
                          PetMapper petMapper, MsgMapper msgMapper,
-                         MessageRepository msgRepository, AnswerService answerService, NotificationsService notificationsServ,
-                         AdvertMapStructMapper advertMapStructMapper) {
+                         MessageRepository msgRepository, AnswerService answerService, NotificationsService notificationsService,
+                         AdvertMapStructMapper advertMapStructMapper,
+                         UserMapper userMapper) {
         this.advertRep= advertRepository;
         this.msgRep= msgRepository;
-        this.notificationsServ= notificationsServ;
         this.petServ = petService;
         this.cityServ = cityService;
         this.userServ=userService;
         this.answerServ=answerService;
         this.advMap = advMapper;
+        this.userMap = userMapper;
         this.msgMap = msgMapper;
         this.petMap=petMapper;
+        this.notificationsService=notificationsService;
         this.advertMapStructMapper=advertMapStructMapper;
         this.msgTrouveDefault="Cette personne a peut-être trouvé votre animal";
         this.msgPerduDefault="Cette personne a perdu un animal ressemblant à celui que vous avez trouvé";
@@ -111,8 +115,15 @@ public class AdvertService {
     }
 
     public String createAdvert(AdvertDTO advertDTO) {
+
+
         Date today = new Date();
         Advert advert = new Advert();
+        advert.setUser(userServ.getByEmail(advertDTO.email()));
+        //si création partielle de l'utilisateur, on lui demande de compléter avant de faire une annonce
+        if (!userServ.isUserUpdated(userMap.toUserDTO(advert.getUser()))){
+            throw new BusinessLogicException("Merci de compléter votre profil avant de saisir une annonce");
+        }
         advert.setCreationDate(today);
         advert.setUpdateDate(today);
         advert.setEventDate(advertDTO.eventDate());
@@ -121,12 +132,22 @@ public class AdvertService {
         advert.setIsActive(true);
         advert.setIsTakeIn(advertDTO.isTakeIn());
         advert.setIsFound(advertDTO.isFound());
-        advert.setUser(userServ.getByEmail(advertDTO.email()));
+
         advert.setCity(cityServ.getByDTO(advertDTO.cityDTO()));
         advert.setPet(petServ.createPet(advertDTO.petDTO()));
         advertRep.save(advert);
+
+        // Notification : si c'est un animal perdu, on notifie ceux qui ont signalé un animal trouvé
+        if (!advert.getIsFound()) {
+            notificationsService.sendNewAdvertNotification(advert);
+        }
+        // Notification : si c'est un animal trouvé, on notifie ceux qui ont signalé un animal perdu
+        else {
+            notificationsService.sendNewFoundAdvertNotification(advert);
+        }
+
         Long advertId = advert.getId();
-        notificationsServ.sendNewAdvertNotification(advert);
+
         return "Votre annonce a bien été créée sous la référence "+Long.toString(advertId);
     }
 
@@ -174,11 +195,11 @@ public class AdvertService {
 
     public String createMsg(long id, MsgDTO msgDTO){
         if((msgDTO.email()== null) && (msgDTO.phone()==null)){
-            throw new BusinessLogicException("Merci de saisir votre adresse email et/ou votre numéro de téléphone pour"+
+            new BusinessLogicException("Merci de saisir votre adresse email et/ou votre numéro de téléphone pour"+
                     " permettre à l'annonceur de vous contacter");
         }
         if(msgDTO.date()== null){
-            throw new BusinessLogicException("Merci de préciser la date de l'événement");
+            new BusinessLogicException("Merci de préciser la date de l'événement");
         }
 
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
@@ -218,10 +239,13 @@ public class AdvertService {
         message.setDate(msgDTO.date());
         message.setAdvert(advert);
         msgRep.save(message);
+        notificationsService.sendNewMsgNotification(msgDTO,advert);
         return "Votre message est bien envoyé";
     }
 
     public String createAnswer(long id, String email, MsgDTO msgDTO){
+
+
         if(msgDTO.date()== null){
             throw new BusinessLogicException("Merci de préciser la date de l'événement");
         }
@@ -233,14 +257,19 @@ public class AdvertService {
                 throw new BusinessLogicException("Merci de préciser si l'animal est mis en sécurité");
             }
         }
-        User user = userServ.getByEmail(email);
 
+        User user = userServ.getByEmail(email);
+        //si création partielle de l'utilisateur, on lui demande de compléter avant de faire une annonce
+        if (!userServ.isUserUpdated(userMap.toUserDTO(user))){
+            throw new BusinessLogicException("Merci de compléter votre profil avant d'envoyer une réponse");
+        }
         if (advert.getIsFound()) {
             //annonce Trouvé
             answerServ.createAnswer(msgDTO,advert,user,msgPerduDefault);
         }else {
             answerServ.createAnswer(msgDTO,advert,user,msgTrouveDefault);
         }
+        notificationsService.sendNewAnswerNotification(msgDTO,user);
         return "Votre message est bien envoyé";
 
     }

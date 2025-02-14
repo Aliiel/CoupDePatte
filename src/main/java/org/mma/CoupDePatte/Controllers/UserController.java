@@ -24,7 +24,6 @@ public class UserController {
     private final AnswerService answerService;
 
 
-    @Secured("ADMIN")
     @GetMapping("/all")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> allUsers = userService.getAllUsers();
