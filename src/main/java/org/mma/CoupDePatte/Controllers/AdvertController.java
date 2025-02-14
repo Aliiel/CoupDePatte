@@ -22,6 +22,12 @@ public class AdvertController {
     }
 
 
+    @GetMapping("/filter/")
+    public ResponseEntity<List<AdvertResponseDTO>> getAdvertByFilter(@RequestBody FilterDTO filterDTO){
+        return ResponseEntity.status(HttpStatus.FOUND).body(advServ.getByFilter(filterDTO));
+
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<AdvertResponseDTO> getAdvertbyId(@PathVariable long id){
         return ResponseEntity.status(HttpStatus.FOUND).body(advServ.getDTOById(id));
