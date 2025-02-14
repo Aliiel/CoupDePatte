@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="157a8f3b-c0cd-4fcf-970c-d92cc2f2b4f7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/mma/CoupDePatte/Controllers/AdvertController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/mma/CoupDePatte/Controllers/AdvertController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/mma/CoupDePatte/Controller/AdvertControllerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/mma/CoupDePatte/Controller/AdvertControllerTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,35 +60,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;JUnit.AdvertControllerTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AdvertServiceTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AdvertServiceTests.testCreateAdvert.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AdvertServiceTests.testGetAdvertById.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AdvertServiceTests.testGetAdvertById_Service.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AdvertTests.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.CoupDePatteApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;AdvertTests&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/ngando/GitHub/CoupDePatte&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.build&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "JUnit.AdvertControllerTests.executor": "Run",
+    "JUnit.AdvertServiceTests.executor": "Run",
+    "JUnit.AdvertServiceTests.testCreateAdvert.executor": "Run",
+    "JUnit.AdvertServiceTests.testGetAdvertById.executor": "Run",
+    "JUnit.AdvertServiceTests.testGetAdvertById_Service.executor": "Run",
+    "JUnit.AdvertTests.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.CoupDePatteApplication.executor": "Run",
+    "git-widget-placeholder": "AdvertTests",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/ngando/GitHub/CoupDePatte",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "configurable.group.build",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="JUnit.AdvertControllerTests">
     <configuration name="AdvertControllerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="CoupDePatte" />
