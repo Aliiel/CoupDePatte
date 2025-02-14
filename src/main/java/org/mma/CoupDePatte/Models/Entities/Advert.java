@@ -63,5 +63,4 @@ public class Advert {
 
     @OneToMany(mappedBy = "advert", orphanRemoval = true)
     private Set<Answer> answers = new LinkedHashSet<>();
-
 }

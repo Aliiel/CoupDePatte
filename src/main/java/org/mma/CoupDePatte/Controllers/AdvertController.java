@@ -8,6 +8,7 @@ import org.mma.CoupDePatte.Models.DTO.MsgDTO;
 import org.mma.CoupDePatte.Services.AdvertService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class AdvertController {
 
     }
 
+    @Secured("ADMIN")
     @PatchMapping("/update/admin/active/{id}")
     public void updAdvActivation(@PathVariable long id){
         advServ.updAdvActive(id);

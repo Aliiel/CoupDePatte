@@ -37,8 +37,6 @@ public class UserService {
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
     private final CityService cityService;
-    private final CityMapper cityMapper;
-    private final CityRepository cityRepository;
 
 
     // méthode pour créer un utilisateur à partir de username, password et email
@@ -66,21 +64,12 @@ public class UserService {
 
         User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(HttpStatus.NOT_FOUND.value()));
 
-        CityDTO cityDTO = cityService.findOrCreateCity(userDTO.getCity());
-
-        log.info("cityDTO: {}", cityDTO);
-
-        City city = cityMapper.toEntity(cityDTO);
-
-        log.info("city: {}", city.getName());
+        City city = cityService.findOrCreateCity(userDTO.getCity());
 
         userMapper.partialUpdate(userDTO, existingUser);
         existingUser.setCity(city);
-        log.info("city de userDTO: {}", existingUser.getCity().getName());
 
-        userRepository.save(existingUser);
-
-        return userMapper.toUserDTO(existingUser);
+        return userMapper.toUserDTO(userRepository.save(existingUser));
     }
 
 
@@ -127,10 +116,10 @@ public class UserService {
     }
 
 
-    public Optional<UserDTO> getUserById(Long id) {
+    public User getUserById(Long id) {
 
         return userRepository.findById(id)
-                .map(userMapper::toUserDTO);
+                .orElseThrow(() -> new UserNotFoundException(HttpStatus.NOT_FOUND.value()));
     }
 
 

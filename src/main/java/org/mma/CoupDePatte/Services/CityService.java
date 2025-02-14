@@ -44,15 +44,9 @@ public class CityService {
     }
 
 
-    public CityDTO findOrCreateCity(CityDTO cityDTO){
+    public City findOrCreateCity(CityDTO cityDTO){
 
-        log.info("findOrCreateCity cityDTO = " + cityDTO);
-
-        City city = cityRepository.findByNameAndZipCodeIgnoreCase(cityDTO.getName(), cityDTO.getZipCode())
+        return cityRepository.findByNameAndZipCodeIgnoreCase(cityDTO.getName(), cityDTO.getZipCode())
                 .orElseGet(() -> cityRepository.save(cityMapper.toEntity(cityDTO)));
-
-        log.info("city = " + city.getName());
-
-        return cityMapper.toCityDTO(city);
     }
 }

@@ -24,6 +24,7 @@ public class UserController {
     private final AnswerService answerService;
 
 
+    @Secured("ADMIN")
     @GetMapping("/all")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> allUsers = userService.getAllUsers();
@@ -48,9 +49,7 @@ public class UserController {
     public ResponseEntity<List<AnswerReponseDTO>> getAnswersByUser(@AuthenticationPrincipal User user) {
 
         Long id = user.getId();
-
         List<AnswerReponseDTO> answers = answerService.getAnswersByUserId(id);
-
         return ResponseEntity.ok(answers);
     }
 }

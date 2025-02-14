@@ -21,6 +21,7 @@ public class AnswerService {
 
     private final AnswerRepository answerRep;
     private final AnswerMapper answerMapper;
+    private final UserService userService;
 
 
     public ArrayList<Answer> getByAdvert(Advert advert) {
@@ -65,21 +66,23 @@ public class AnswerService {
 
     public List<AnswerReponseDTO> getAnswersByUserId(Long id) {
 
-        List<AnswerReponseDTO> userAnswers = answerMapper.toDTOList(answerRep.findByUser_Id(id));
+        User user = userService.getUserById(id);
 
-        List<AnswerReponseDTO> activeAnswers = new ArrayList<>();
+        List<Answer> answers = new ArrayList<>(user.getAnswers());
+        List<Answer> activeAnswers = new ArrayList<>();
 
-        for (AnswerReponseDTO userAnswer : userAnswers) {
+        for (Answer userAnswer : answers) {
 
-            if (Boolean.TRUE.equals(userAnswer.getAdvert().isActive())) {
+            if (Boolean.TRUE.equals(userAnswer.getAdvert().getIsActive())) {
                 activeAnswers.add(userAnswer);
             }
         }
 
-        if (userAnswers.isEmpty() || activeAnswers.isEmpty()) {
+        if (answers.isEmpty() || activeAnswers.isEmpty()) {
 
             throw new NoAnswersFoundException(HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
-        return activeAnswers;
+
+        return answerMapper.toDTOList(activeAnswers);
     }
 }

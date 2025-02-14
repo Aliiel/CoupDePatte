@@ -14,5 +14,4 @@ public class UserDTO {
     private String address;
     private String phone;
     private CityDTO city;
-    private RoleDTO role;
 }

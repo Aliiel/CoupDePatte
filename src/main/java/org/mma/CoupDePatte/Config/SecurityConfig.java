@@ -20,7 +20,8 @@ public class SecurityConfig {
 
     private static final String [] AUTH_WHITELIST = {
             "/auth/*",
-            "/adverts/{id}"
+            "/adverts/{id}",
+            "/adverts/message/{id}"
     };
 
     private final JwtAuthFilter jwtAuthFilter;
