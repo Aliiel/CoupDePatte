@@ -121,11 +121,4 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(HttpStatus.NOT_FOUND.value()));
     }
-
-
-
-    public boolean isUserUpdated (UserDTO userDTO) {
-
-        return !userDTO.getPhone().isEmpty();
-    }
 }
