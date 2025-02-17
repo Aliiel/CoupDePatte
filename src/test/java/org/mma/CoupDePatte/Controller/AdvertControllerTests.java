@@ -18,14 +18,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -44,12 +44,8 @@ public class AdvertControllerTests {
     @BeforeEach
     void setUp() {
         advertDTO = new AdvertDTO(new Date(), "Test description", "photo.jpg", true, true, "test@example.com", null, null);
-        filterDTO = new FilterDTO(true, new CityDTO("Paris", "75000"), new Date(), "Chien", // specie
-            "Labrador", // breed (facultatif, peut être null)
-            "Male", // gender (facultatif, peut être null)
-            "Marron", // eyes (facultatif, peut être null)
-            "Noir", // coat (facultatif, peut être null)
-            true // tattoo (facultatif, peut être null)
+        filterDTO = new FilterDTO(true, new CityDTO("Paris", "75000"), new Date(), "Chien",
+            "Labrador", "Male", "Marron", "Noir", true
         );
     }
 
@@ -94,5 +90,16 @@ public class AdvertControllerTests {
 
         assertEquals("Aucune annonce ne correspond à votre sélection", exception.getMessage());
     }
+
+    @Test
+    void testUpdAdvActivation_Admin() {
+        doNothing().when(advertService).updAdvActive(1L);
+
+        ResponseEntity<Void> response = advertController.updAdvActivation(1L);
+
+        assertNull(response);
+        verify(advertService, times(1)).updAdvActive(1L);
+    }
+
 
 }

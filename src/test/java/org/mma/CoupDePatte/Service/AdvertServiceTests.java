@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +27,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class AdvertServiceTests {
@@ -140,6 +141,13 @@ public class AdvertServiceTests {
         });
 
         assertEquals("Aucune annonce ne correspond à votre sélection", exception.getMessage());
+    }
+
+    @Test
+    void testUpdAdvActive() {
+        doNothing().when(advertService).updAdvActive(1L);
+        advertService.updAdvActive(1L);
+        verify(advertService, times(1)).updAdvActive(1L);
     }
 
 }

@@ -64,10 +64,10 @@ public class AdvertService {
         //Utilisation de la requète dynamique (petServ.getPetByFilterSpec(filterDTO))
         if(filterDTO.isTrouve()) {
             lstAdvertOK = advertRep.findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundTrueAndPetInOrderByEventDateDesc
-                    (city, eventDate, petServ.getPetByFilterSpec(filterDTO));
+                (city, eventDate, petServ.getPetByFilterSpec(filterDTO));
         }else {
             lstAdvertOK = advertRep.findByCityAndEventDateLessThanAndIsActiveTrueAndIsFoundFalseAndPetInOrderByEventDateDesc
-                    (city, eventDate, petServ.getPetByFilterSpec(filterDTO));
+                (city, eventDate, petServ.getPetByFilterSpec(filterDTO));
         }
         return lstAdvertOK;
 
@@ -75,13 +75,13 @@ public class AdvertService {
 
     public AdvertResponseDTO getDTOById(Long id) {
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
+            .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
         return advMap.AdvertToResponseDTO(advert);
 
     }
     public Advert getById(Long id) {
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
+            .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
         return advert;
 
     }
@@ -132,7 +132,7 @@ public class AdvertService {
 
     public AdvertResponseDTO updateAdvert(long id, AdvertDTO advertDTO) {
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
+            .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
         Date today = new Date();
         advert.setUpdateDate(today);
         if (advertDTO.eventDate() !=null) {
@@ -158,7 +158,7 @@ public class AdvertService {
 
     public void updAdvUnActive(long id) {
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
+            .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
         advert.setIsActive(false);
         advertRep.save(advert);
 
@@ -166,7 +166,7 @@ public class AdvertService {
 
     public void updAdvActive(long id) {
         Advert advert = advertRep.findByIdAndIsActiveFalse(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou active"));
+            .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou active"));
         advert.setIsActive(true);
         advertRep.save(advert);
 
@@ -175,14 +175,14 @@ public class AdvertService {
     public String createMsg(long id, MsgDTO msgDTO){
         if((msgDTO.email()== null) && (msgDTO.phone()==null)){
             new BusinessLogicException("Merci de saisir votre adresse email et/ou votre numéro de téléphone pour"+
-                    " permettre à l'annonceur de vous contacter");
+                " permettre à l'annonceur de vous contacter");
         }
         if(msgDTO.date()== null){
             new BusinessLogicException("Merci de préciser la date de l'événement");
         }
 
         Advert advert = advertRep.findByIdAndIsActiveTrue(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
+            .orElseThrow(() -> new ResourceNotFoundException("Annonce avec ID " + id + " non trouvée ou non active"));
         if(!advert.getIsFound()) {
             if (msgDTO.isTakeIn() == null) {
                 throw new BusinessLogicException("Merci de préciser si l'animal est mis en sécurité");
