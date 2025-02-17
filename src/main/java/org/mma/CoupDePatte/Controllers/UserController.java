@@ -37,7 +37,7 @@ public class UserController {
     }
 
 
-    @Secured("ROLE_ADMIN")
+    @Secured("ADMIN")
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
