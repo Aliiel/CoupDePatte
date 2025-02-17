@@ -6,14 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="157a8f3b-c0cd-4fcf-970c-d92cc2f2b4f7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/mma/CoupDePatte/Services/AdvertService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/mma/CoupDePatte/Services/AdvertService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/org/mma/CoupDePatte/Controller/AdvertControllerTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/mma/CoupDePatte/Controller/AdvertControllerTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/mma/CoupDePatte/Service/AdvertServiceTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/mma/CoupDePatte/Service/AdvertServiceTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/org/mma/CoupDePatte/Models/Mappers/CityMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/org/mma/CoupDePatte/Models/Mappers/CityMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/org/mma/CoupDePatte/Models/Mappers/RoleMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/org/mma/CoupDePatte/Models/Mappers/RoleMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/org/mma/CoupDePatte/Models/Mappers/UserMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/org/mma/CoupDePatte/Models/Mappers/UserMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/org/mma/CoupDePatte/Controller/AdvertControllerTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/org/mma/CoupDePatte/Controller/AdvertControllerTests.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/org/mma/CoupDePatte/Service/AdvertServiceTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/org/mma/CoupDePatte/Service/AdvertServiceTests.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,8 +98,8 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.AdvertControllerTests.testUpdAdvActivation_Admin">
-    <configuration name="AdvertControllerTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.AdvertControllerTests.testGetAdvertSelection">
+    <configuration name="AdvertControllerTests.testGetAdvertSelection" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="CoupDePatte" />
       <extension name="coverage">
         <pattern>
@@ -116,7 +109,8 @@
       </extension>
       <option name="PACKAGE_NAME" value="org.mma.CoupDePatte.Controller" />
       <option name="MAIN_CLASS_NAME" value="org.mma.CoupDePatte.Controller.AdvertControllerTests" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="METHOD_NAME" value="testGetAdvertSelection" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -193,11 +187,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.AdvertControllerTests.testGetAdvertSelection" />
         <item itemvalue="JUnit.AdvertControllerTests.testUpdAdvActivation_Admin" />
         <item itemvalue="JUnit.AdvertServiceTests.testUpdAdvActive" />
         <item itemvalue="JUnit.AdvertServiceTests.testGetByFilter_ThrowsException" />
         <item itemvalue="JUnit.AdvertServiceTests" />
-        <item itemvalue="JUnit.AdvertControllerTests" />
       </list>
     </recent_temporary>
   </component>
@@ -224,7 +218,7 @@
       <workItem from="1739344482667" duration="18947000" />
       <workItem from="1739444517849" duration="7351000" />
       <workItem from="1739808537686" duration="5734000" />
-      <workItem from="1739821781726" duration="3911000" />
+      <workItem from="1739821781726" duration="4315000" />
     </task>
     <servers />
   </component>

@@ -22,6 +22,7 @@ import org.springframework.security.access.AccessDeniedException;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -99,6 +100,23 @@ public class AdvertControllerTests {
 
         assertNull(response);
         verify(advertService, times(1)).updAdvActive(1L);
+    }
+
+    @Test
+    void testGetAdvertSelection() {
+        ArrayList<AdvertResponseDTO> advertList = new ArrayList<>();
+        advertList.add(advertResponseDTO);
+
+        when(advertService.getByFilter(any(FilterDTO.class))).thenReturn(advertList);
+
+        ResponseEntity<List<AdvertResponseDTO>> response = advertController.getAdvertsByFilter(filterDTO);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        assertEquals(advertResponseDTO, response.getBody().get(0));
+
+        verify(advertService, times(1)).getByFilter(any(FilterDTO.class));
     }
 
 
