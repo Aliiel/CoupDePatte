@@ -8,7 +8,7 @@ import java.util.Date;
 public record FilterDTO(
         //Gestion des filtres choisis par l'utilisateur pour lui envoyer les annonces correspondant à son filtre
         @NotNull(message = "Merci de préciser le type d'annonces cherché")
-        boolean isTrouve,
+        Boolean isTrouve,
         @NotBlank(message = "Précisez à proximité de quelle ville et précisez le code postal")
         CityDTO cityDTO,
         @NotNull (message = "Précisez à partir de quelle date faire la recherche")
@@ -19,6 +19,6 @@ public record FilterDTO(
         String gender,
         String eyes,
         String coat,
-        boolean tattoo
+        Boolean tattoo
 ) {
 }

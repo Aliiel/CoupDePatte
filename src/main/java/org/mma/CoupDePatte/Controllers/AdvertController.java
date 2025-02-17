@@ -2,6 +2,7 @@ package org.mma.CoupDePatte.Controllers;
 
 import org.mma.CoupDePatte.Models.DTO.AdvertDTO;
 import org.mma.CoupDePatte.Models.DTO.AdvertResponseDTO;
+import org.mma.CoupDePatte.Models.DTO.FilterDTO;
 import org.mma.CoupDePatte.Models.DTO.MsgDTO;
 import org.mma.CoupDePatte.Services.AdvertService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/adverts")
@@ -50,7 +52,6 @@ public class AdvertController {
     @PatchMapping("/update/active/{id}")
     public ResponseEntity<Void> updAdvUnActivation(@PathVariable long id){
         advServ.updAdvUnActive(id);
-
         return null;
     }
 
@@ -76,6 +77,12 @@ public class AdvertController {
     public ResponseEntity<ArrayList<MsgDTO>> displayAnswer(@PathVariable long id){
         return ResponseEntity.status(HttpStatus.OK).body(advServ.searchAnswer(id));
 
+    }
+
+    @GetMapping("/adverts/filter")
+    public ResponseEntity<List<AdvertResponseDTO>> getAdvertsByFilter(@RequestBody FilterDTO filterDTO) {
+        List<AdvertResponseDTO> adverts = advServ.getByFilter(filterDTO);
+        return ResponseEntity.ok(adverts);
     }
 
 
