@@ -2,9 +2,11 @@ package org.mma.CoupDePatte.Controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mma.CoupDePatte.Models.DTO.AdvertResponseDTO;
 import org.mma.CoupDePatte.Models.DTO.AnswerReponseDTO;
 import org.mma.CoupDePatte.Models.DTO.UserDTO;
 import org.mma.CoupDePatte.Models.Entities.User;
+import org.mma.CoupDePatte.Services.AdvertService;
 import org.mma.CoupDePatte.Services.AnswerService;
 import org.mma.CoupDePatte.Services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,10 @@ public class UserController {
 
     private final UserService userService;
     private final AnswerService answerService;
+    private final AdvertService advertService;
 
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/all")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> allUsers = userService.getAllUsers();
@@ -41,6 +45,14 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+    }
+
+
+    @GetMapping("/adverts")
+    public ResponseEntity<List<AdvertResponseDTO>> getAdvertsByUser(@AuthenticationPrincipal User user) {
+        Long id = user.getId();
+        List<AdvertResponseDTO> adverts = advertService.findAdvertsByUserId(id);
+        return ResponseEntity.ok(adverts);
     }
 
 

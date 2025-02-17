@@ -1,6 +1,5 @@
 package org.mma.CoupDePatte.Services;
 
-import lombok.RequiredArgsConstructor;
 import org.mma.CoupDePatte.Exceptions.NoAnswersFoundException;
 import org.mma.CoupDePatte.Exceptions.ResourceNotFoundException;
 import org.mma.CoupDePatte.Models.DTO.AnswerReponseDTO;
@@ -69,7 +68,7 @@ public class AnswerService {
 
     public List<AnswerReponseDTO> getAnswersByUserId(Long id) {
 
-        List<Answer> answers = answerRep.findByUser_Id(id);
+        List<Answer> answers = answerRepository.findByUser_Id(id);
         List<Answer> activeAnswers = new ArrayList<>();
 
         for (Answer userAnswer : answers) {
