@@ -66,9 +66,7 @@ public class AnswerService {
 
     public List<AnswerReponseDTO> getAnswersByUserId(Long id) {
 
-        User user = userService.getUserById(id);
-
-        List<Answer> answers = new ArrayList<>(user.getAnswers());
+        List<Answer> answers = answerRep.findByUser_Id(id);
         List<Answer> activeAnswers = new ArrayList<>();
 
         for (Answer userAnswer : answers) {

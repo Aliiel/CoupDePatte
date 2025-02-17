@@ -9,7 +9,6 @@ import org.mma.CoupDePatte.Models.Entities.City;
 import org.mma.CoupDePatte.Models.Entities.Role;
 import org.mma.CoupDePatte.Models.Entities.User;
 import org.mma.CoupDePatte.Models.Mappers.UserMapper;
-import org.mma.CoupDePatte.Models.Repositories.CityRepository;
 import org.mma.CoupDePatte.Models.Repositories.RoleRepository;
 import org.mma.CoupDePatte.Models.Repositories.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -113,15 +112,9 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public User getUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(HttpStatus.NOT_FOUND.value()));
-    }
 
     public boolean isUserUpdated (UserDTO userDTO) {
         //champs non chargés sont null donc test sur null à la place de empty
         return userDTO.getPhone()!=null;
-
     }
-
 }

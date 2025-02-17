@@ -39,7 +39,6 @@ public class AdvertController {
 
     @PostMapping("/new")
     public ResponseEntity<String> newAdvert(@RequestBody AdvertDTO advertDTO) {
-        log.info("Requête reçue - advert : " + advertDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(advServ.createAdvert(advertDTO));
 
     }
