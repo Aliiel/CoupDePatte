@@ -53,6 +53,7 @@ public class Advert {
 
     @ManyToOne
     @JoinColumn(name = "pet_id")
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private Pet pet;
 
     @ManyToOne
