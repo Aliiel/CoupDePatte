@@ -56,7 +56,7 @@ public class AdvertController {
 
     }
 
-    @Secured("ADMIN")
+    @Secured("ROLE_ADMIN")
     @PatchMapping("/update/active/{id}")
     public void updAdvUnActivation(@PathVariable long id){
         advServ.updAdvUnActive(id);

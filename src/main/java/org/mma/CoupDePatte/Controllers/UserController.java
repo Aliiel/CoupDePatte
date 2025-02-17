@@ -24,6 +24,7 @@ public class UserController {
     private final AnswerService answerService;
 
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/all")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> allUsers = userService.getAllUsers();
@@ -37,7 +38,7 @@ public class UserController {
     }
 
 
-    @Secured("ADMIN")
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);

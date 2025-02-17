@@ -21,12 +21,10 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
     private final AnswerMapper answerMapper;
-    private final UserService userService;
 
-    public AnswerService(AnswerRepository answerRepository,AnswerMapper answerMapper, UserService userService){
+    public AnswerService(AnswerRepository answerRepository,AnswerMapper answerMapper){
         this.answerRepository=answerRepository;
         this.answerMapper=answerMapper;
-        this.userService=userService;
     }
 
     public ArrayList<Answer> getByAdvert(Advert advert) {
@@ -69,7 +67,7 @@ public class AnswerService {
 
     public List<AnswerReponseDTO> getAnswersByUserId(Long id) {
 
-        List<Answer> answers = answerRep.findByUser_Id(id);
+        List<Answer> answers = answerRepository.findByUser_Id(id);
         List<Answer> activeAnswers = new ArrayList<>();
 
         for (Answer userAnswer : answers) {
