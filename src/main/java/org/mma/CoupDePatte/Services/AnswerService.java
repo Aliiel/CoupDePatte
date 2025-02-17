@@ -15,17 +15,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@RequiredArgsConstructor
+
 @Service
 public class AnswerService {
 
-    private final AnswerRepository answerRep;
+    private final AnswerRepository answerRepository;
     private final AnswerMapper answerMapper;
     private final UserService userService;
 
+    public AnswerService(AnswerRepository answerRepository,AnswerMapper answerMapper, UserService userService){
+        this.answerRepository=answerRepository;
+        this.answerMapper=answerMapper;
+        this.userService=userService;
+    }
 
     public ArrayList<Answer> getByAdvert(Advert advert) {
-        return answerRep.findByAdvertOrderByDateDesc(advert);
+        return answerRepository.findByAdvertOrderByDateDesc(advert);
     }
 
 
@@ -41,12 +46,12 @@ public class AnswerService {
         answer.setDate(msgDTO.date());
         answer.setAdvert(advert);
         answer.setUser(user);
-        answerRep.save(answer);
+        answerRepository.save(answer);
     }
 
 
-    public String updateAnswer(long id, MsgDTO msgDTO) {
-        Answer answer = answerRep.findById(id)
+    public void updateAnswer(long id, MsgDTO msgDTO) {
+        Answer answer = answerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Réponse avec ID " + id + " non trouvée"));
 
         if (msgDTO.content() != null) {
@@ -58,11 +63,9 @@ public class AnswerService {
         if (msgDTO.date() != null) {
             answer.setDate(msgDTO.date());
         }
-        answerRep.save(answer);
+        answerRepository.save(answer);
 
-        return "Votre message a été modifié et renvoyé";
     }
-
 
     public List<AnswerReponseDTO> getAnswersByUserId(Long id) {
 
@@ -82,5 +85,11 @@ public class AnswerService {
         }
 
         return answerMapper.toDTOList(activeAnswers);
+    }
+
+    public Advert getAdvert (Long id){
+        Answer answer = answerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Réponse avec ID " + id + " non trouvée"));
+        return answer.getAdvert();
     }
 }

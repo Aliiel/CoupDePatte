@@ -276,7 +276,10 @@ public class AdvertService {
 
 
     public String updAnswer(long id, MsgDTO msgDTO){
-        return answerServ.updateAnswer(id,msgDTO);
+        User user = answerServ.getAdvert(id).getUser();
+        answerServ.updateAnswer(id,msgDTO);
+        notificationsService.sendNewAnswerNotification(msgDTO,user);
+        return "Votre message a été modifié et renvoyé";
 
     }
 
